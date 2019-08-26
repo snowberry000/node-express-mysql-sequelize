@@ -1,0 +1,2867 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is documentation for Just Venue CRM API. For every request you must include in the header: \n Content-Type: application/json \n\n For protected routes by authorization we use JWT. Each of these have a lock by them. Must include a Bearer Token in the header \n Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ...",
+    "version": "1.0.0",
+    "title": "Just Venue API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "fioriolorenzof@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3001",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User Authentication"
+    },
+    {
+      "name": "User",
+      "description": "User management"
+    },
+    {
+      "name": "Venue",
+      "description": "Venue management"
+    },
+    {
+      "name": "Space",
+      "description": "Space management"
+    },
+    {
+      "name": "Booking Status",
+      "description": "Booking Status management"
+    },
+    {
+      "name": "Company",
+      "description": "Company management"
+    },
+    {
+      "name": "Customer",
+      "description": "Customer management"
+    },
+    {
+      "name": "Booking",
+      "description": "Booking, Quote, Invoice management"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get all users",
+        "description": "Get all users from database",
+        "operationId": "getUsers",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetUsersResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user",
+        "description": "This can only be done by the logged in user.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserBody"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful request",
+            "schema": {
+              "$ref": "#/definitions/ApiSuccessResponse"
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiUnauthorizezdResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Soft delete user",
+        "description": "This can only be done by the logged in user.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/ApiSuccessResponse"
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiUnauthorizezdResponse"
+            }
+          },
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/users/hard": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Hard delete user",
+        "description": "Remove user from database",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/ApiSuccessResponse"
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiUnauthorizezdResponse"
+            }
+          },
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/users/restore": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Restore soft deleted user",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/ApiSuccessResponse"
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiUnauthorizezdResponse"
+            }
+          },
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register user",
+        "description": "Register user that can now be used for authentication",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Register user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateUserResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User Login",
+        "description": "Returns Bearer Token for JWT authentication",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User Login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUserBody"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/LoginUserResponse"
+            }
+          },
+          "422": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Return user",
+        "description": "This can only be done by the logged in user.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ReturnUserResponse"
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiUnauthorizezdResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }        
+    },
+    "/venues": {
+      "post": {
+        "tags": [
+          "Venue"
+        ],
+        "summary": "Create venue",
+        "description": "Add new venue of a user in database",
+        "operationId": "createVenue",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates venue",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateVenueBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateVenueResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Venue"],
+        "summary": "Get venues for logged in user",
+        "description": "Get all venues for logged user from database",
+        "operationId": "getVenues",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetVenuesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/venues/{venue_id}": {
+      "get": {
+        "tags": ["Venue"],
+        "summary": "Get a venue",
+        "description": "Get a venue from database",
+        "operationId": "getVenue",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetVenueResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Venue"],
+        "summary": "Update a venue",
+        "description": "Update a venue from database",
+        "operationId": "updateVenue",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update venue",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateVenueBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetVenueResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Venue"],
+        "summary": "Remove a venue",
+        "description": "Remove a venue from database",
+        "operationId": "removeVenue",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a venue."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/spaces": {
+      "post": {
+        "tags": [
+          "Space"
+        ],
+        "summary": "Create space",
+        "description": "Creates new space of a venue in database",
+        "operationId": "createSpace",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates space",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSpaceBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateSpaceResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/spaces/venue/{venue_id}": {
+      "get": {
+        "tags": ["Space"],
+        "summary": "Get spaces for a venue",
+        "description": "Get all spaces for a venue from database",
+        "operationId": "getSpaces",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetSpacesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/spaces/{space_id}": {
+      "get": {
+        "tags": ["Space"],
+        "summary": "Get a space",
+        "description": "Get a space from database",
+        "operationId": "getSpace",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetSpaceResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Space"],
+        "summary": "Update a space",
+        "description": "Update a space from database",
+        "operationId": "updateSpace",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updates space",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateSpaceBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetSpaceResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Space"],
+        "summary": "Remove a space",
+        "description": "Remove a space from database",
+        "operationId": "removeSpace",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a space."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/statuses": {
+      "post": {
+        "tags": [
+          "Booking Status"
+        ],
+        "summary": "Create new custom booking status",
+        "description": "Add new booking status of a user in database",
+        "operationId": "createStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates status",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateStatusBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateStatusResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Booking Status"
+        ],
+        "summary": "Get statuses for logged in user",
+        "description": "Get all statuses for logged user from database",
+        "operationId": "getStatuses",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetStatusesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/statuses/{status_id}": {
+      "get": {
+        "tags": [
+          "Booking Status"
+        ],
+        "summary": "Get a booking status",
+        "description": "Get a booking status from database",
+        "operationId": "getStatus",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateStatusResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Booking Status"
+        ],
+        "summary": "Update a booking status",
+        "description": "Update a booking status from database",
+        "operationId": "updateStatus",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update status",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateStatusBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateStatusResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Booking Status"
+        ],
+        "summary": "Remove a status",
+        "description": "Remove a status from database",
+        "operationId": "removeStatus",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a status."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/companies": {
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Create new company",
+        "description": "Add new company of a user in database",
+        "operationId": "createCompany",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates company",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCompanyBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateCompanyResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Get all companies",
+        "description": "Get all companies from database",
+        "operationId": "getCompanies",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetCompaniesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/company": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Get a company",
+        "description": "Get a company for logged in user from database",
+        "operationId": "getCompany",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateCompanyResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/companies/{company_id}": {
+      "put": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Update a company",
+        "description": "Update a company from database",
+        "operationId": "updateCompany",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update company",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCompanyBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateCompanyResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Remove a company",
+        "description": "Remove a company from database",
+        "operationId": "removeCompany",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a company."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/customers": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Create new customer",
+        "description": "Add new customer of a user in database",
+        "operationId": "createCustomer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates customer",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Get customers for logged in user",
+        "description": "Get all customers for logged user from database",
+        "operationId": "getCustomers",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetCustomersResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/customers/{customer_id}": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Get a customer",
+        "description": "Get a customer from database",
+        "operationId": "getCustomer",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Update a customer",
+        "description": "Update a customer from database",
+        "operationId": "updateCustomer",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update customer",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCustomerBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Remove a customer",
+        "description": "Remove a customer from database",
+        "operationId": "removeCustomer",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a customer."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Create new booking",
+        "description": "Add new booking for logged in user in database",
+        "operationId": "createBooking",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates booking",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateBookingBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateBookingResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get bookings for logged in user",
+        "description": "Get all bookings for logged user from database",
+        "operationId": "getBookings",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetBookingsResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings/{booking_id}": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get a booking",
+        "description": "Get a booking from database",
+        "operationId": "getBooking",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateBookingResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Update a booking",
+        "description": "Update a booking from database",
+        "operationId": "updateBooking",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update booking",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateBookingBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateBookingResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Remove a booking",
+        "description": "Remove a booking from database",
+        "operationId": "removeBooking",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a booking."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings/{booking_id}/quotes": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Create new quote",
+        "description": "Add new quote for a booking in database",
+        "operationId": "createQuote",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates quote",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateQuoteBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateQuoteResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get Quotes for a booking",
+        "description": "Get all quotes for a booking from database",
+        "operationId": "getQuotes",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetQuotesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings/{booking_id}/quotes/{quote_id}": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get a quote",
+        "description": "Get a quote from database",
+        "operationId": "getQuote",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateQuoteResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Update a quote",
+        "description": "Update a quote from database",
+        "operationId": "updateQuote",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update quote",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateQuoteBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateQuoteResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Remove a quote",
+        "description": "Remove a quote from database",
+        "operationId": "removeQuote",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed a quote."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings/{booking_id}/invoices": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Create new invoice",
+        "description": "Add new invoice for a booking in database",
+        "operationId": "createInvoice",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creates invoice",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateInvoiceBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateInvoiceResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get Invoices for a booking",
+        "description": "Get all invoices for a booking from database",
+        "operationId": "getInvoices",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetInvoicesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings/{booking_id}/invoices/{invoice_id}": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get an invoice",
+        "description": "Get an invoice from database",
+        "operationId": "getInvoice",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateInvoiceResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Update an invoice",
+        "description": "Update an invoice from database",
+        "operationId": "updateInvoice",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update invoice",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateInvoiceBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateInvoiceResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Remove an invoice",
+        "description": "Remove an invoice from database",
+        "operationId": "removeInvoice",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "message": {
+              "type": "string",
+              "example": "Successfully removed an invoice."
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/bookings/invoices/all": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Get All Invoices",
+        "description": "Get all invoices from database",
+        "operationId": "getAllInvoices",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetInvoicesResponse"
+            }
+          },
+          "422": {
+            "description": "Invalid operation",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearer_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://localhost:3001/v1/auth/login",
+      "flow": "implicit"
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "UserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "RegisterUserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateUserBody": {
+      "type": "object",
+      "required": [
+        "email", 
+        "password"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },        
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Successfully created new user."
+        },
+        "token": {
+          "type": "string",
+          "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ...",
+          "description": "Authentication token"
+        },
+        "user": {
+          "$ref": "#/definitions/RegisterUserResponse"
+        }
+      }
+    },
+    "LoginUserBody": {
+      "type": "object",
+      "required": [
+        "email", 
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "LoginUserResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ...",
+          "description": "Authentication token"
+        },
+        "user": {
+          "$ref": "#/definitions/UserResponse"
+        },
+        "success": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "ReturnUserResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "user": {
+          "$ref": "#/definitions/UserResponse"
+        }
+      }
+    },
+    "UpdateUserBody": {
+      "type": "object",
+      "properties": {
+        "first": {
+          "type": "string",
+          "example": "John"
+        },
+        "last": {
+          "type": "string",
+          "example": "doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "john.doe@gmail.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "8889401234"
+        }
+      }
+    },
+    "GetUsersResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "venues": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/UserResponse"
+            }
+          ]
+        }
+      }
+    },
+    "VenueResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateVenueBody": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateVenueBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateVenueResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "venue": {
+          "$ref": "#/definitions/VenueResponse"
+        }
+      }
+    },
+    "GetVenuesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "venues": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/VenueResponse"
+            }
+          ]
+        }
+      }
+    },
+    "GetVenueResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "venue": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            },
+            "UserId": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "spaces": {
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/definitions/SpaceResponse"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "SpaceResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "VenueId": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateSpaceBody": {
+      "type": "object",
+      "required": [
+        "name", 
+        "VenueId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "VenueId": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateSpaceBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "name", 
+        "VenueId"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "VenueId": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateSpaceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "space": {
+          "$ref": "#/definitions/SpaceResponse"
+        }
+      }
+    },
+    "GetSpacesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "spaces": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/SpaceResponse"
+            }
+          ]
+        }
+      }
+    },
+    "GetSpaceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "space": {
+          "$ref": "#/definitions/SpaceResponse"
+        }
+      }
+    },
+    "StatusResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "number"
+        },
+        "order": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateStatusBody": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "parentId": {
+          "type": "number"
+        },
+        "order": {
+          "type": "number"
+        }
+      }
+    },
+    "CreateStatusResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "status": {
+          "$ref": "#/definitions/StatusResponse"
+        }
+      }
+    },
+    "GetStatusesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/StatusResponse"
+            }
+          ]
+        }
+      }
+    },
+    "UpdateStatusBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "parentId": {
+          "type": "number"
+        },
+        "order": {
+          "type": "number"
+        }
+      }
+    },
+    "CompanyResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "vatId": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postCode": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateCompanyBody": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "vatId": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postCode": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateCompanyResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "status": {
+          "$ref": "#/definitions/CompanyResponse"
+        }
+      }
+    },
+    "GetCompaniesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "companies": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/CompanyResponse"
+            }
+          ]
+        }
+      }
+    },
+    "UpdateCompanyBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "vatId": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postCode": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "vatNumber": {
+          "type": "string"
+        },
+        "note": {
+          "type": "text"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateCustomerBody": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "vatNumber": {
+          "type": "string"
+        },
+        "note": {
+          "type": "text"
+        }
+      }
+    },
+    "CreateCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "status": {
+          "$ref": "#/definitions/CustomerResponse"
+        }
+      }
+    },
+    "GetCustomersResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          ]
+        }
+      }
+    },
+    "UpdateCustomerBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "vatNumber": {
+          "type": "string"
+        },
+        "note": {
+          "type": "text"
+        }
+      }
+    },
+    "BookingResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "eventName": {
+          "type": "string"
+        },
+        "venueId": {
+          "type": "number"
+        },
+        "spaceId": {
+          "type": "number"
+        },
+        "customerId": {
+          "type": "number"
+        },
+        "ownerId": {
+          "type": "number"
+        },
+        "slots": {
+          "type": "text"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateBookingBody": {
+      "type": "object",
+      "required": [
+        "eventName",
+        "venueId",
+        "spaceId",
+        "customerId",
+        "ownerId"
+      ],
+      "properties": {
+        "eventName": {
+          "type": "string"
+        },
+        "venueId": {
+          "type": "number"
+        },
+        "spaceId": {
+          "type": "number"
+        },
+        "customerId": {
+          "type": "number"
+        },
+        "ownerId": {
+          "type": "number"
+        },
+        "slots": {
+          "type": "text"
+        }
+      }
+    },
+    "CreateBookingResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "status": {
+          "$ref": "#/definitions/BookingResponse"
+        }
+      }
+    },
+    "GetBookingsResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/BookingResponse"
+            }
+          ]
+        }
+      }
+    },
+    "UpdateBookingBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "eventName",
+        "venueId",
+        "spaceId",
+        "customerId",
+        "ownerId"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "eventName": {
+          "type": "string"
+        },
+        "venueId": {
+          "type": "number"
+        },
+        "spaceId": {
+          "type": "number"
+        },
+        "customerId": {
+          "type": "number"
+        },
+        "ownerId": {
+          "type": "number"
+        },
+        "slots": {
+          "type": "text"
+        }
+      }
+    },
+    "QuoteResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "slots": {
+          "type": "string"
+        },
+        "costItems": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "discount": {
+          "type": "number"
+        },        
+        "note": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateQuoteBody": {
+      "type": "object",
+      "required": [
+        "slots"
+      ],
+      "properties": {
+        "slots": {
+          "type": "string"
+        },
+        "costItems": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "discount": {
+          "type": "number"
+        },        
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "status": {
+          "$ref": "#/definitions/QuoteResponse"
+        }
+      }
+    },
+    "GetQuotesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/QuoteResponse"
+            }
+          ]
+        }
+      }
+    },
+    "UpdateQuoteBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "slots"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "slots": {
+          "type": "string"
+        },
+        "costItems": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "discount": {
+          "type": "number"
+        },
+        "note": {
+          "type": "text"
+        }
+      }
+    },
+    "InvoiceResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "customerId":{
+          "type": "number"
+        },
+        "payment_method": {
+          "type": "text"
+        },
+        "slots": {
+          "type": "text"
+        },
+        "cost_items": {
+          "type": "text"
+        },
+        "sub_total": {
+          "type": "float"
+        },
+        "discount": {
+          "type": "number"
+        },
+        "tax": {
+          "type": "float"
+        },
+        "grand_total": {
+          "type": "float"
+        },        
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateInvoiceBody": {
+      "type": "object",
+      "required": [
+        "slots"
+      ],
+      "properties": {
+        "customerId":{
+          "type": "number"
+        },
+        "payment_method": {
+          "type": "text"
+        },
+        "slots": {
+          "type": "text"
+        },
+        "cost_items": {
+          "type": "text"
+        },
+        "sub_total": {
+          "type": "float"
+        },
+        "discount": {
+          "type": "number"
+        },
+        "tax": {
+          "type": "float"
+        },
+        "grand_total": {
+          "type": "float"
+        }
+      }
+    },
+    "CreateInvoiceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "status": {
+          "$ref": "#/definitions/InvoiceResponse"
+        }
+      }
+    },
+    "GetInvoicesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/InvoiceResponse"
+            }
+          ]
+        }
+      }
+    },
+    "UpdateInvoiceBody": {
+      "type": "object",
+      "required": [
+        "id",
+        "slots"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "customerId":{
+          "type": "number"
+        },
+        "payment_method": {
+          "type": "text"
+        },
+        "slots": {
+          "type": "text"
+        },
+        "cost_items": {
+          "type": "text"
+        },
+        "sub_total": {
+          "type": "float"
+        },
+        "discount": {
+          "type": "number"
+        },
+        "tax": {
+          "type": "float"
+        },
+        "grand_total": {
+          "type": "float"
+        }
+      }
+    },
+    "ApiErrorResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": false
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiSuccessResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiUnauthorizezdResponse": {
+      "type": "string",
+      "example": "Unauthorized"
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
