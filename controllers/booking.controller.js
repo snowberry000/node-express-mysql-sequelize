@@ -1,5 +1,6 @@
 const { Booking, Quote, Invoice, Venue, Space, Customer, User, Status } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
+const mail = require('../lib/mail');
 
 const create = async function(req, res){
     let err, booking;
@@ -36,7 +37,7 @@ const create = async function(req, res){
 
     let ownerErr, owner;
     [ownerErr, owner] = await to(User.findOne({where: {id: booking_obj.ownerId}}));
-    if(ownerErr || !owner) 
+    if(ownerErr || !owner)
         booking_obj.owner = null;
     else{
         booking_obj.owner = owner.toWeb();
@@ -89,7 +90,7 @@ const getAll = async function(req, res){
 
         let ownerErr, owner;
         [ownerErr, owner] = await to(User.findOne({where: {id: booking_obj.ownerId}}));
-        if(ownerErr || !owner) 
+        if(ownerErr || !owner)
             booking_obj.owner = null;
         else{
             booking_obj.owner = owner.toWeb();
@@ -105,7 +106,7 @@ const getAll = async function(req, res){
 
         return booking_obj;
     }));
-    
+
     return ReS(res, {bookings:booking_array});
 }
 module.exports.getAll = getAll;
@@ -151,7 +152,7 @@ const update = async function(req, res){
 
     let ownerErr, owner;
     [ownerErr, owner] = await to(User.findOne({where: {id: booking_obj.ownerId}}));
-    if(ownerErr || !owner) 
+    if(ownerErr || !owner)
         booking_obj.owner = null;
     else{
         booking_obj.owner = owner.toWeb();
@@ -190,9 +191,83 @@ const createQuote = async function(req, res){
     [err, quote] = await to(Quote.create(quote_info));
     if(err) return ReE(res, err, 422);
 
-    return ReS(res, {quote:quote.toWeb()}, 201);
+    let customerErr, customer;
+    [customerErr, customer] = await to(Customer.findOne({where: {id: quote_info.customerId}}));
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    let today = new Date();
+    let dd = today.getDate();
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    let weekday = new Array(7);
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+
+    var n = weekday[today.getDay()];
+    const date =  n + ',' + dd + ' ' + monthNames[today.getMonth()] + ' ' + yyyy + ' at ' + today.getHours() + ":" + today.getMinutes();
+
+    const [netSubtotal, taxes, grandTotal] = computeCostItemsSummary(
+      JSON.parse(quote_info.costItems),
+      quote_info.discount
+    );
+    const slots = JSON.parse(quote_info.slots)
+    let spaces = '';
+    let duration = '';
+    if (slots.length) {
+      spaces = slots[0].kind;
+      duration = slots[0].endHour - slots[0].startHour;
+    }
+    mail.sendWithTemplate('', customer.email, 'quotation', {
+      subject: 'New Quotation',
+      emailMessage: 'New Quotation',
+      date: date,
+      duration: "2 hours" || duration,
+      spaces: spaces || "single-day" || quote_info.note || "Spaces",
+      costItems: JSON.parse(quote_info.costItems),
+      slots: JSON.parse(quote_info.slots),
+      discount: quote_info.discount,
+      netSubtotal, taxes, grandTotal,
+      id: quote.id || 0,
+    }).catch((mErr) => {
+      console.log("mErr", mErr, mErr.response)
+    });
+
+    return ReS(res, {}, 201);
 }
 module.exports.createQuote = createQuote;
+
+function computeCostItemsSummary(costItems, discount) {
+  const netSubtotal =
+    costItems &&
+    costItems.reduce(
+      (acc, item) =>
+        acc + item.quantity * item.unitPrice * (1 - discount / 100),
+      0
+    );
+
+  const taxes =
+    costItems &&
+    costItems.reduce(
+      (acc, item) =>
+        acc +
+        (item.quantity * item.unitPrice * (1 - discount / 100) * item.vatRate) /
+        100,
+      0
+    );
+
+  const grandTotal = netSubtotal + taxes;
+
+  return [netSubtotal.toFixed(2), taxes.toFixed(2), grandTotal.toFixed(2)];
+}
 
 const getAllQuotes = async function(req, res){
     let booking_id = req.params.booking_id;
@@ -203,7 +278,7 @@ const getAllQuotes = async function(req, res){
 
     let quote_array = [];
     quote_array = quotes.map(obj=>obj.toWeb());
-    
+
     return ReS(res, {quotes:quote_array});
 }
 module.exports.getAllQuotes = getAllQuotes;
@@ -262,7 +337,7 @@ const getInvoices = async function(req, res){
 
     let invoice_array = [];
     invoice_array = invoices.map(obj=>obj.toWeb());
-    
+
     return ReS(res, {invoices:invoice_array});
 }
 module.exports.getInvoices = getInvoices;
@@ -275,7 +350,7 @@ const getAllInvoices = async function(req, res){
 
     let invoice_array = [];
     invoice_array = invoices.map(obj=>obj.toWeb());
-    
+
     return ReS(res, {invoices:invoice_array});
 }
 module.exports.getAllInvoices = getAllInvoices;
@@ -283,7 +358,7 @@ module.exports.getAllInvoices = getAllInvoices;
 const getInvoice = async function(req, res){
     let invoice = req.invoice;
 
-    return ReS(res, {invoice:invoice.toWeb()});   
+    return ReS(res, {invoice:invoice.toWeb()});
 }
 module.exports.getInvoice = getInvoice;
 
