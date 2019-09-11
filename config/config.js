@@ -15,4 +15,10 @@ CONFIG.db_password  = process.env.DB_PASSWORD   || '';
 CONFIG.jwt_encryption  = process.env.JWT_ENCRYPTION || 'jwt_just_venue';
 CONFIG.jwt_expiration  = process.env.JWT_EXPIRATION || '10000';
 
+CONFIG.email_host  = process.env.EMAIL_HOST || '';
+CONFIG.email_user  = process.env.EMAIL_USER || '';
+CONFIG.email_pass  = process.env.EMAIL_PASS || '';
+CONFIG.SEND_GRID_API_KEY  = process.env.SEND_GRID_API_KEY || '';
+CONFIG.FROM_EMAIL  = process.env.FROM_EMAIL || 'fioriolorenzof@gmail.com';
+
 module.exports = CONFIG;
