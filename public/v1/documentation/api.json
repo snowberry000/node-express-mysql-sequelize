@@ -2354,7 +2354,7 @@
           "type": "string"
         },
         "note": {
-          "type": "text"
+          "type": "string"
         },
         "UserId": {
           "type": "number"
@@ -2389,7 +2389,7 @@
           "type": "string"
         },
         "note": {
-          "type": "text"
+          "type": "string"
         }
       }
     },
@@ -2448,7 +2448,7 @@
           "type": "string"
         },
         "note": {
-          "type": "text"
+          "type": "string"
         }
       }
     },
@@ -2474,7 +2474,7 @@
           "type": "number"
         },
         "slots": {
-          "type": "text"
+          "type": "string"
         },
         "createdAt": {
           "type": "string"
@@ -2510,7 +2510,7 @@
           "type": "number"
         },
         "slots": {
-          "type": "text"
+          "type": "string"
         }
       }
     },
@@ -2573,7 +2573,7 @@
           "type": "number"
         },
         "slots": {
-          "type": "text"
+          "type": "string"
         }
       }
     },
@@ -2681,7 +2681,7 @@
           "type": "number"
         },
         "note": {
-          "type": "text"
+          "type": "string"
         }
       }
     },
@@ -2695,13 +2695,13 @@
           "type": "number"
         },
         "payment_method": {
-          "type": "text"
+          "type": "string"
         },
         "slots": {
-          "type": "text"
+          "type": "string"
         },
         "cost_items": {
-          "type": "text"
+          "type": "string"
         },
         "sub_total": {
           "type": "float"
@@ -2714,7 +2714,10 @@
         },
         "grand_total": {
           "type": "float"
-        },        
+        },
+        "status": {
+          "type": "string"
+        },
         "createdAt": {
           "type": "string"
         },
@@ -2733,13 +2736,13 @@
           "type": "number"
         },
         "payment_method": {
-          "type": "text"
+          "type": "string"
         },
         "slots": {
-          "type": "text"
+          "type": "string"
         },
         "cost_items": {
-          "type": "text"
+          "type": "string"
         },
         "sub_total": {
           "type": "float"
@@ -2752,6 +2755,9 @@
         },
         "grand_total": {
           "type": "float"
+        },
+        "status": {
+          "type": "string"
         }
       }
     },
@@ -2798,13 +2804,13 @@
           "type": "number"
         },
         "payment_method": {
-          "type": "text"
+          "type": "string"
         },
         "slots": {
-          "type": "text"
+          "type": "string"
         },
         "cost_items": {
-          "type": "text"
+          "type": "string"
         },
         "sub_total": {
           "type": "float"
@@ -2817,6 +2823,9 @@
         },
         "grand_total": {
           "type": "float"
+        },
+        "status": {
+          "type": "string"
         }
       }
     },

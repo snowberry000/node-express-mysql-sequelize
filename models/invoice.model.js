@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         sub_total:             DataTypes.FLOAT,
         discount:              {type: DataTypes.INTEGER, validate: {min:0, max:100}},
         tax:                   DataTypes.FLOAT,
-        grand_total:           DataTypes.FLOAT
+        grand_total:           DataTypes.FLOAT,
+        status:                DataTypes.STRING
     });
 
     Model.associate = function(models){
