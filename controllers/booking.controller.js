@@ -183,6 +183,7 @@ module.exports.remove = remove;
 
 const createQuote = async function(req, res){
     let booking_id = req.params.booking_id;
+    let user = req.user.toWeb();
 
     let quote_info = req.body;
     quote_info.BookingId = booking_id;
@@ -190,9 +191,6 @@ const createQuote = async function(req, res){
     let err, quote;
     [err, quote] = await to(Quote.create(quote_info));
     if(err) return ReE(res, err, 422);
-
-    let customerErr, customer;
-    [customerErr, customer] = await to(Customer.findOne({where: {id: quote_info.customerId}}));
 
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
@@ -226,7 +224,7 @@ const createQuote = async function(req, res){
       spaces = slots[0].kind;
       duration = slots[0].endHour - slots[0].startHour;
     }
-    mail.sendWithTemplate('', customer.email, 'quotation', {
+    mail.sendWithTemplate('', user.email, 'quotation', {
       subject: 'New Quotation',
       emailMessage: 'New Quotation',
       date: date,
