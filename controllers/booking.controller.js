@@ -232,12 +232,17 @@ const createQuote = async function(req, res){
       spaces = slots[0].kind;
       duration = slots[0].endHour - slots[0].startHour;
     }
+
+    let spaceErr, space;
+    [spaceErr, space] = await to(Space.findOne({where: {id: booking.spaceId}}));
+
     mail.sendWithTemplate('', customer.email, 'quotation', {
       subject: 'New Quotation',
       emailMessage: 'New Quotation',
       date: date,
       duration: "2 hours" || duration,
-      spaces: spaces || "single-day" || quote_info.note || "Spaces",
+    //   spaces: spaces || "single-day" || quote_info.note || "Spaces",
+      spaces: space.name,
       costItems: JSON.parse(quote_info.costItems),
       slots: JSON.parse(quote_info.slots),
       discount: quote_info.discount,
