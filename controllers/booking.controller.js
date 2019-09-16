@@ -183,13 +183,21 @@ module.exports.remove = remove;
 
 const createQuote = async function(req, res){
     let booking_id = req.params.booking_id;
-    let user = req.user.toWeb();
+    // let user = req.user.toWeb();
 
     let quote_info = req.body;
     quote_info.BookingId = booking_id;
 
     let err, quote;
     [err, quote] = await to(Quote.create(quote_info));
+    if(err) return ReE(res, err, 422);
+
+    let bookingErr, booking;
+    [bookingErr, booking] = await to(Booking.findOne({where: {id: booking_id}}));    
+    if(err) return ReE(res, err, 422);
+
+    let customerErr, customer;
+    [customerErr, customer] = await to(Customer.findOne({where: {id: booking.customerId}}));
     if(err) return ReE(res, err, 422);
 
     const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -224,7 +232,7 @@ const createQuote = async function(req, res){
       spaces = slots[0].kind;
       duration = slots[0].endHour - slots[0].startHour;
     }
-    mail.sendWithTemplate('', user.email, 'quotation', {
+    mail.sendWithTemplate('', customer.email, 'quotation', {
       subject: 'New Quotation',
       emailMessage: 'New Quotation',
       date: date,
@@ -239,7 +247,7 @@ const createQuote = async function(req, res){
       console.log("mErr", mErr, mErr.response)
     });
 
-    return ReS(res, {}, 201);
+    return ReS(res, {quote: quote.toWeb()}, 201);
 }
 module.exports.createQuote = createQuote;
 
