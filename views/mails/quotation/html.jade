@@ -534,28 +534,36 @@ html(xmlns='http://www.w3.org/1999/xhtml', xmlns:o='urn:schemas-microsoft-com:of
                                                         p(style='line-height: 27px; text-align: left; font-size: 12px; margin: 0;')
                                                             span(style='font-size: 18px;')
                                                             div
-                                                                table.table.table-hover
+                                                                table.table.table-hover(style='width: 100%; font-size: 16px;')
                                                                     thead
                                                                         tr(style='display: table-row; height: 100%;')
-                                                                            th Name
-                                                                            th Description
-                                                                            th Quantity
-                                                                            th UnitPrice
-                                                                            th VatRate
+                                                                            th(style='min-width: 70px') Name
+                                                                            th(style='min-width: 100px') Description
+                                                                            th(style='min-width: 65px') Quantity
+                                                                            th(style='min-width: 65px') UnitPrice
+                                                                            th(style='min-width: 65px') VatRate
                                                                     tbody
                                                                         each costItem in costItems
                                                                             tr
-                                                                                td=costItem.name
-                                                                                td=costItem.description
-                                                                                td=costItem.quantity
-                                                                                td=costItem.unitPrice
-                                                                                td=costItem.vatRate
+                                                                                td(style='text-align: center')=costItem.name
+                                                                                td(style='text-align: center')=costItem.description
+                                                                                td(style='text-align: center')=costItem.quantity
+                                                                                td(style='text-align: center')=costItem.unitPrice
+                                                                                td(style='text-align: center')=costItem.vatRate
 
-                                                            div(style='float: right;')
-                                                                p Net subtotal: #{netSubtotal}
-                                                                p Discount (%): #{discount}
-                                                                p Taxes: #{taxes}
-                                                                p Grand Total : #{grandTotal}
+                                                            div(style='float: right; font-size: 16px;')
+                                                                p 
+                                                                  span(style='min-width: 90px; float: left; display: block;') Net subtotal
+                                                                  span(style='min-width: 70px; text-align: right; float: right; display: block;') #{netSubtotal}
+                                                                p
+                                                                  span(style='min-width: 90px; float: left') Discount (%)
+                                                                  span(style='min-width: 70px; text-align: right; float: right; display: block;') #{discount}
+                                                                p
+                                                                  span(style='min-width: 90px; float: left') Taxes
+                                                                  span(style='min-width: 70px; text-align: right; float: right; display: block;') #{taxes}
+                                                                p
+                                                                  span(style='min-width: 90px; float: left') Grand Total
+                                                                  span(style='min-width: 70px; text-align: right; float: right; display: block;') #{grandTotal}
 
                                                 //if mso
                                                 // [if (!mso)&(!IE)] <!
@@ -664,9 +672,9 @@ html(xmlns='http://www.w3.org/1999/xhtml', xmlns:o='urn:schemas-microsoft-com:of
                                                 // <![endif]
                                                 //if (mso)|(IE)
                                                 //if (mso)|(IE)
-                        div(style='background-color:#85459A;')
+                        div(style='background-color:transparent;')
                             .block-grid(style='Margin: 0 auto; min-width: 320px; max-width: 700px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;')
-                                div(style='border-collapse: collapse;display: table;width: 100%;background-color:transparent;')
+                                div(style='border-collapse: collapse;display: table;width: 100%;background-color:#85459A;')
                                     //if (mso)|(IE)
                                       table(width='100%', cellpadding='0', cellspacing='0', border='0', style='background-color:#85459A;')
                                         tbody

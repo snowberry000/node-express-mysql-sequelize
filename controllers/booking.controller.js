@@ -183,6 +183,7 @@ module.exports.remove = remove;
 
 const createQuote = async function(req, res){
     let booking_id = req.params.booking_id;
+    // let user = req.user.toWeb();
 
     let quote_info = req.body;
     quote_info.BookingId = booking_id;
@@ -191,8 +192,13 @@ const createQuote = async function(req, res){
     [err, quote] = await to(Quote.create(quote_info));
     if(err) return ReE(res, err, 422);
 
+    let bookingErr, booking;
+    [bookingErr, booking] = await to(Booking.findOne({where: {id: booking_id}}));    
+    if(err) return ReE(res, err, 422);
+
     let customerErr, customer;
-    [customerErr, customer] = await to(Customer.findOne({where: {id: quote_info.customerId}}));
+    [customerErr, customer] = await to(Customer.findOne({where: {id: booking.customerId}}));
+    if(err) return ReE(res, err, 422);
 
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
@@ -226,12 +232,17 @@ const createQuote = async function(req, res){
       spaces = slots[0].kind;
       duration = slots[0].endHour - slots[0].startHour;
     }
+
+    let spaceErr, space;
+    [spaceErr, space] = await to(Space.findOne({where: {id: booking.spaceId}}));
+
     mail.sendWithTemplate('', customer.email, 'quotation', {
       subject: 'New Quotation',
       emailMessage: 'New Quotation',
       date: date,
       duration: "2 hours" || duration,
-      spaces: spaces || "single-day" || quote_info.note || "Spaces",
+    //   spaces: spaces || "single-day" || quote_info.note || "Spaces",
+      spaces: space.name,
       costItems: JSON.parse(quote_info.costItems),
       slots: JSON.parse(quote_info.slots),
       discount: quote_info.discount,
@@ -241,7 +252,7 @@ const createQuote = async function(req, res){
       console.log("mErr", mErr, mErr.response)
     });
 
-    return ReS(res, {}, 201);
+    return ReS(res, {quote: quote.toWeb()}, 201);
 }
 module.exports.createQuote = createQuote;
 
