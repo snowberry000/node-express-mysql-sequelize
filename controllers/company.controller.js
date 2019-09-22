@@ -33,9 +33,11 @@ const get = async function(req, res){
     let user = req.user.toWeb();
 
     [err, company] = await to(Company.findOne({where: {UserId: user.id}}));
-    if(err) return ReE(res, err, 422);
-    
-    return ReS(res, {company:company.toWeb()});
+    if(err) return ReE(res, err, 422);    
+
+    if (company)
+        return ReS(res, {company:company.toWeb()});
+    else return ReS(res, {company:company});
 }
 module.exports.get = get;
 
