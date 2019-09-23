@@ -537,31 +537,31 @@ html(xmlns='http://www.w3.org/1999/xhtml', xmlns:o='urn:schemas-microsoft-com:of
                                                                 table.table.table-hover(style='width: 100%; font-size: 16px;')
                                                                     thead
                                                                         tr(style='display: table-row; height: 100%;')
-                                                                            th(style='min-width: 70px') Name
-                                                                            th(style='min-width: 100px') Description
-                                                                            th(style='min-width: 65px') Quantity
-                                                                            th(style='min-width: 65px') UnitPrice
-                                                                            th(style='min-width: 65px') VatRate
+                                                                            th(style='min-width: 70px; color: #555555;') Name
+                                                                            th(style='min-width: 100px; color: #555555;') Description
+                                                                            th(style='min-width: 65px; color: #555555;') Quantity
+                                                                            th(style='min-width: 65px; color: #555555;') UnitPrice
+                                                                            th(style='min-width: 65px; color: #555555;') VatRate
                                                                     tbody
                                                                         each costItem in costItems
                                                                             tr
-                                                                                td(style='text-align: center')=costItem.name
-                                                                                td(style='text-align: center')=costItem.description
-                                                                                td(style='text-align: center')=costItem.quantity
-                                                                                td(style='text-align: center')=costItem.unitPrice
-                                                                                td(style='text-align: center')=costItem.vatRate
+                                                                                td(style='text-align: center; color: #555555;')=costItem.name
+                                                                                td(style='text-align: center; color: #555555;')=costItem.description
+                                                                                td(style='text-align: center; color: #555555;')=costItem.quantity
+                                                                                td(style='text-align: center; color: #555555;')=costItem.unitPrice
+                                                                                td(style='text-align: center; color: #555555;')=costItem.vatRate
 
                                                             div(style='float: right; font-size: 16px;')
-                                                                p 
+                                                                p(style='padding-top: 8px;') 
                                                                   span(style='min-width: 90px; float: left; display: block;') Net subtotal
                                                                   span(style='min-width: 70px; text-align: right; float: right; display: block;') #{netSubtotal}
-                                                                p
+                                                                p(style='padding-top: 5px;') 
                                                                   span(style='min-width: 90px; float: left') Discount (%)
                                                                   span(style='min-width: 70px; text-align: right; float: right; display: block;') #{discount}
-                                                                p
+                                                                p(style='padding-top: 5px;') 
                                                                   span(style='min-width: 90px; float: left') Taxes
                                                                   span(style='min-width: 70px; text-align: right; float: right; display: block;') #{taxes}
-                                                                p
+                                                                p(style='padding-top: 5px;') 
                                                                   span(style='min-width: 90px; float: left') Grand Total
                                                                   span(style='min-width: 70px; text-align: right; float: right; display: block;') #{grandTotal}
 
