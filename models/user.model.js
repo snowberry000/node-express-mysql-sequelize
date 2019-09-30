@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         firstName       : DataTypes.STRING,
         lastName        : DataTypes.STRING,
         email           : {type: DataTypes.STRING, allowNull: true, unique: true, validate: { isEmail: {msg: "Email address is invalid."} }},
-        password        : DataTypes.STRING
+        // password        : DataTypes.STRING
+        outseta_id      : DataTypes.STRING,
     });
 
     Model.associate = function(models){
@@ -21,31 +22,31 @@ module.exports = (sequelize, DataTypes) => {
         Model.hasMany(models.Booking);
     };
 
-    Model.beforeSave(async (user, options) => {
-        let err;
-        if (user.changed('password')){
-            let salt, hash
-            [err, salt] = await to(bcrypt.genSalt(10));
-            if(err) TE(err.message, true);
+    // Model.beforeSave(async (user, options) => {
+    //     let err;
+    //     if (user.changed('password')){
+    //         let salt, hash
+    //         [err, salt] = await to(bcrypt.genSalt(10));
+    //         if(err) TE(err.message, true);
 
-            [err, hash] = await to(bcrypt.hash(user.password, salt));
-            if(err) TE(err.message, true);
+    //         [err, hash] = await to(bcrypt.hash(user.password, salt));
+    //         if(err) TE(err.message, true);
 
-            user.password = hash;
-        }
-    });
+    //         user.password = hash;
+    //     }
+    // });
 
-    Model.prototype.comparePassword = async function (pw) {
-        let err, pass
-        if(!this.password) TE('password not set');
+    // Model.prototype.comparePassword = async function (pw) {
+    //     let err, pass
+    //     if(!this.password) TE('password not set');
 
-        [err, pass] = await to(bcrypt_p.compare(pw, this.password));
-        if(err) TE(err);
+    //     [err, pass] = await to(bcrypt_p.compare(pw, this.password));
+    //     if(err) TE(err);
 
-        if(!pass) TE('invalid password');
+    //     if(!pass) TE('invalid password');
 
-        return this;
-    }
+    //     return this;
+    // }
 
     Model.prototype.getJWT = function () {
         let expiration_time = parseInt(CONFIG.jwt_expiration);

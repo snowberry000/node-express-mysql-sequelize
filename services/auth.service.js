@@ -52,7 +52,7 @@ const authUser = async function(userInfo){//returns token
     if(!unique_key) TE('Please enter an email to login');
 
 
-    if(!userInfo.password) TE('Please enter a password to login');
+    // if(!userInfo.password) TE('Please enter a password to login');
 
     let user;
     if(validator.isEmail(unique_key)){
@@ -65,11 +65,27 @@ const authUser = async function(userInfo){//returns token
         TE('A valid email was not entered');
     }
 
-    if(!user) TE('Not registered');
+    // if(!user) TE('Not registered');
 
-    [err, user] = await to(user.comparePassword(userInfo.password));
+    if (!user)
+    [err, user] = await to(User.create(userInfo));    
+
+    // [err, user] = await to(user.comparePassword(userInfo.password));
 
     if(err) TE(err.message);
+
+    const { Company } = require('../models');
+    [errCompany, company] = await to(Company.create({
+        UserId: user.id,
+        city: "",
+        currency: "GBP",
+        name: "",
+        phone: "",
+        postCode: "",
+        street: "",
+        vatId: "",
+        vatRate: "20",
+    }));
 
     return user;
 

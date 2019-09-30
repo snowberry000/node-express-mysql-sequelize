@@ -1,4 +1,5 @@
 const { User }          = require('../models');
+const { Company } = require('../models');
 const authService       = require('../services/auth.service');
 const { to, ReE, ReS }  = require('../services/util.service');
 
@@ -7,8 +8,8 @@ const create = async function(req, res){
 
     if(!body.unique_key && !body.email){
         return ReE(res, 'Please enter an email to register.');
-    } else if(!body.password){
-        return ReE(res, 'Please enter a password to register.');
+    // } else if(!body.password){
+    //     return ReE(res, 'Please enter a password to register.');
     }else{
         let err, user;
 
@@ -17,6 +18,18 @@ const create = async function(req, res){
         
         let user_json = user.toWeb();
         delete user_json.password;
+
+        [errCompany, company] = await to(Company.create({
+            UserId: user_json.id,
+            city: "",
+            currency: "GBP",
+            name: "",
+            phone: "",
+            postCode: "",
+            street: "",
+            vatId: "",
+            vatRate: "20",
+        }));
 
         return ReS(res, {message:'Successfully created new user.', user:user_json, token:user.getJWT()}, 201);
     }
