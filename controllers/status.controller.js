@@ -28,7 +28,19 @@ const getAll = async function(req, res){
 	let statuses_array = [];
     statuses_array = statuses.map(obj => obj.toWeb());
 
-    return ReS(res, {statuses: statuses_array});
+    const defaultValues = ['Enquiry', 'Proposal', 'Accepted', 'Paid'];
+    let newStatusArray = [];
+    defaultValues.forEach(item => {
+        let filteredOne = statuses_array.filter(itemOne => itemOne.name === item || itemOne.parentId === item);
+        filteredOne.sort((a,b) => (a.order > b.order) ? 1 : -1);
+        newStatusArray = [...newStatusArray, ...filteredOne];
+    })
+
+    const filteredOne = statuses_array.filter(item => item.type === 'custom' && item.parentId === null)
+    filteredOne.sort((a,b) => (a.order > b.order) ? 1 : -1);
+    newStatusArray = [ ...newStatusArray, ...filteredOne];
+
+    return ReS(res, {statuses: newStatusArray});
 }
 module.exports.getAll = getAll;
 
