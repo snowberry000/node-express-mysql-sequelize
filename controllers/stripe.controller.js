@@ -97,7 +97,7 @@ async function transferFunds(req, res) {
         metadata: { 'id': 10 }
     }).then(function (charge) {
         console.log(JSON.stringify(charge));
-        return ReS(charge, { charge }, 201);
+        return ReS(res, { charge }, 201);
         //return result
     }, function (stripeErr) {
         console.log(stripeErr);
