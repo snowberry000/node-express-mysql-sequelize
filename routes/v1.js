@@ -9,6 +9,7 @@ const SpaceController       					= require('../controllers/space.controller');
 const StatusController      					= require('../controllers/status.controller');
 const CustomerController    					= require('../controllers/customer.controller');
 const BookingController    						= require('../controllers/booking.controller');
+const StripeController                = require('../controllers/stripe.controller');
 
 const custom 	              = require('./../middleware/custom');
 
@@ -78,6 +79,14 @@ router.get(     '/bookings/invoices/all',         										passport.authenticat
 router.get(     '/bookings/:booking_id/invoices/:invoice_id',         passport.authenticate('jwt', {session:false}), custom.invoice, BookingController.getInvoice);
 router.put(     '/bookings/:booking_id/invoices/:invoice_id',         passport.authenticate('jwt', {session:false}), custom.invoice, BookingController.updateInvoice);
 router.delete(  '/bookings/:booking_id/invoices/:invoice_id',         passport.authenticate('jwt', {session:false}), custom.invoice, BookingController.removeInvoice);
+
+// router.post(    '/bookings/:booking_id/transferFunds',         				passport.authenticate('jwt', {session:false}), StripeController.transferFunds);
+// router.post(    '/bookings/:booking_id/realeaseFund',         				passport.authenticate('jwt', {session:false}), StripeController.realeaseFund);
+router.post(    '/stripe/transferFunds',         				            passport.authenticate('jwt', {session:false}), StripeController.transferFunds);
+router.post(    '/stripe/transferCardFunds',         				        passport.authenticate('jwt', {session:false}), StripeController.transferCardFunds);
+router.post(    '/stripe/getStripeDashboardLink',         				  passport.authenticate('jwt', {session:false}), StripeController.getStripeDashboardLink);
+router.post(    '/stripe/getCreateStripeAccountLink',         			passport.authenticate('jwt', {session:false}), StripeController.getCreateStripeAccountLink);
+router.post(    '/stripe/realeaseFund',         			            	passport.authenticate('jwt', {session:false}), StripeController.realeaseFund);
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
 
