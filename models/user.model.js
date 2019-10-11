@@ -12,8 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         email           : {type: DataTypes.STRING, allowNull: true, unique: true, validate: { isEmail: {msg: "Email address is invalid."} }},
         // password        : DataTypes.STRING
         outseta_id      : DataTypes.STRING,
-        stripe_public_key: DataTypes.STRING,
-        stripe_secret_key: DataTypes.STRING,
+        
+        stripe_public_key   : DataTypes.STRING,
+        stripe_secret_key   : DataTypes.STRING,
+
+        stripe_user_id          : DataTypes.STRING,
+        stripe_refresh_token    : DataTypes.STRING,
+        stripe_token_type       : DataTypes.STRING,
+        stripe_status                  : DataTypes.INTEGER,   //'NOT_CREATED': 0, 'CREATED': 1, 'ACTIVATED': 2
     });
 
     Model.associate = function(models){

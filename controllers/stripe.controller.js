@@ -1,19 +1,15 @@
+const { User } = require('../models');
+
 const CONFIG = require('../config/config');
 
 var utils = require('../services/stripe.service');
 
-// var stripe = require("stripe")(CONFIG.stripe_secret_key);
-var stripe = require("stripe")('sk_test_j77QBEGhvKzFCVAqKrtKWhWH002Q2pTrzl');
+var stripe = require("stripe")(CONFIG.stripe_secret_key);
 
 var request = require('request');
 
 const { to, ReE, ReS } = require('../services/util.service');
-// function setStripeAccountInfo(req, res) {
-//     var cb = function (result) {
-//         utils.sendResponse(res, result);
-//     }
-//     stripeAccModel.setStripeAccountInfo(req, res, cb);
-// }
+
 
 function transferCardFunds(req, res) {
     const amount = req.body.amount;
@@ -22,11 +18,13 @@ function transferCardFunds(req, res) {
     stripe.charges.create({
         amount: amount,
         currency: currency,
-        source: token.id,
+        source: token,
         description: 'Charge for xxx',
-        metadata: { 'id': amount },
+        receipt_email: 'truegardener555@gmail.com',
+        metadata: { 'id': amount }
     }).then(function (charge) {
-        return ReS(res, charge, 201);
+        console.log(JSON.stringify(charge));
+        return ReS(charge, { charge }, 201);
         //return result
     }, function (stripeErr) {
         console.log(stripeErr);
@@ -35,54 +33,77 @@ function transferCardFunds(req, res) {
     });
 }
 
-function transferFunds(req, res) {
+function setStripeAccountInfo(req, res) {
 
-    // let authData = {
-    //     'response_type': 'code',
-    //     'client_id': 'ca_DCOD0B6Wd86NOq7esAPJtpqe8jpC67vg',
-    //     'scope': 'read_write'
-    // }
+    let err, user, data;
 
-    // request.get('https://connect.stripe.com/express/oauth/authorize', { json: authData }, function (error, response, body) {
-    //     console.log(body);
     let postData = {
-        'code': 'ac_FyBwUourghSiDVH0ec8Jlak6BvyGmFq5',
-        'client_secret': 'sk_test_aYOHJ7Ock7MKVGeJjxfp8Jyz00ULOy4Dz6',
+        'code': req['body']['stripe_auth_code'],
+        'client_secret': CONFIG.stripe_secret_key,
         'grant_type': 'authorization_code'
     }
-    request.post('https://connect.stripe.com/oauth/token', { json: postData }, function (error, response, body) {
-        if (!error && response && response.statusCode === 200) {
+    console.log(postData);
+    request.post(
+        'https://connect.stripe.com/oauth/token',
+        { json: postData },
+        async function (error, response, body) {
             console.log(body);
-            let dataObj = {
-                'user_id': '111',
-                'stripe_user_id': body['stripe_user_id'],
-                'stripe_refresh_token': body['refresh_token'],
-                'stripe_token_type': body['token_type']
+            if (!error && response && response.statusCode === 200) {
+                user = req.user;
+                let dataObj = {
+                    'stripe_user_id': body['stripe_user_id'],
+                    'stripe_refresh_token': body['refresh_token'],
+                    'stripe_token_type': body['token_type'],
+                    'stripe_status': 1
+                }
+                console.log(dataObj);
+                //Save Data to the in User database
+
+                user.set(dataObj);
+
+                [err, user] = await to(user.save());
+                if (err) {
+                    if (err.message == 'Validation error') err = 'The email address is already in use';
+                    return ReE(res, err);
+                }
+                return ReS(res, { message: 'Updated User stripe info: ' + user.email });
+
+            } else {
             }
-            console.log(dataObj);
-            stripe.charges.create({
-                amount: 100,
-                currency: 'usd',
-                source: body['stripe_user_id'],
-                description: 'Charge for ',
-                // receipt_email: result['email'],
-                receipt_email: 'truegardener555@gmail.com',
-                metadata: { 'id': 10 }
-            }).then(function (charge) {
-                console.log(JSON.stringify(charge));
-                return ReS(charge, { charge }, 201);
-                //return result
-            }, function (stripeErr) {
-                console.log(stripeErr);
-                return ReE(res, stripeErr, 422);
-                //return error
-            });
-        } else {
-            console.log('err');
-            return ReE(res, 'err', 423);
         }
+    );
+}
+
+async function transferFunds(req, res) {
+
+    const amount = req.body.amount;
+    const currency = req.body.currency;
+
+    let userErr, user;
+    [userErr, user] = await to(User.findOne({ where: { id: req.user.id } }));
+    if (userErr) {
+        if (userErr.message == 'Validation error') err = 'User does not exist!';
+        return ReE(res, userErr);
+    }
+    
+    console.log(user);
+    stripe.charges.create({
+        amount: amount,
+        currency: currency,
+        source: user['stripe_user_id'],
+        description: 'Pay for booking',
+        // receipt_email: result['email'],
+        receipt_email: 'truegardener555@gmail.com',
+        metadata: { 'id': 10 }
+    }).then(function (charge) {
+        console.log(JSON.stringify(charge));
+        return ReS(charge, { charge }, 201);
+        //return result
+    }, function (stripeErr) {
+        console.log(stripeErr);
+        return ReE(res, stripeErr, 422);
+        //return error
     });
-    // });
 
 }
 
@@ -107,15 +128,15 @@ function transferFunds(req, res) {
 function getStripeDashboardLink(req, res) {
     stripe.accounts.createLoginLink(sRes[0]['stripe_user_id'], function (err, link) {
         if (err) {
-            return ReE(err, err, 421);
+            return ReE(res, err, 421);
         } else {
-            return ReS(link, { 'url': link['url'] }, 201);
+            return ReS(res, { 'url': link['url'] }, 201);
         }
     });
 }
 
 function getCreateStripeAccountLink(req, res, cb) {
-    // return ReS(charge, { 'url': `https://connect.stripe.com/express/oauth/authorize?client_id=${stripeClientId}&state=${role}_${jobId}` }, 201);
+    return ReS(res, { 'url': `https://connect.stripe.com/express/oauth/authorize?client_id=${CONFIG.stripe_client_id}` }, 201);
 }
 
 function realeaseFund(req, res) {
@@ -134,7 +155,7 @@ function realeaseFund(req, res) {
 }
 
 module.exports = {
-    // setStripeAccountInfo,
+    setStripeAccountInfo,
     transferFunds,
     transferCardFunds,
     // getReleaseFundUrl,
