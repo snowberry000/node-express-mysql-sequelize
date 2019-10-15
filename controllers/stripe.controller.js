@@ -20,7 +20,7 @@ function transferCardFunds(req, res) {
         currency: currency,
         source: token,
         description: 'Charge for xxx',
-        receipt_email: 'truegardener555@gmail.com',
+        receipt_email: 'bestservice-jinjin@hotmail.com',     //client receiver mail
         metadata: { 'id': amount }
     }).then(function (charge) {
         console.log(JSON.stringify(charge));
@@ -93,16 +93,14 @@ async function transferFunds(req, res) {
         source: user['stripe_user_id'],
         description: 'Pay for booking',
         // receipt_email: result['email'],
-        receipt_email: 'truegardener555@gmail.com',
+        receipt_email: 'bestservice-jinjin@hotmail.com',        //client receiver mail
         metadata: { 'id': 10 }
     }).then(function (charge) {
         console.log(JSON.stringify(charge));
         return ReS(res, { charge }, 201);
-        //return result
     }, function (stripeErr) {
         console.log(stripeErr);
-        return ReE(res, stripeErr, 422);
-        //return error
+        return ReE(res, stripeErr, 422);        
     });
 
 }
