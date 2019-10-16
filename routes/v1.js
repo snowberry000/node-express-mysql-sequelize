@@ -85,11 +85,12 @@ router.delete(  '/bookings/:booking_id/invoices/:invoice_id',         passport.a
 router.post(    '/bookings/transferCardFunds',         				            passport.authenticate('jwt', {session:false}), StripeController.transferCardFunds);
 
 router.post(    '/bookings/getCreateStripeAccountLink',         			passport.authenticate('jwt', {session:false}), StripeController.getCreateStripeAccountLink);
-router.post(    '/bookings/setStripeAccountInfo',         				  passport.authenticate('jwt', {session:false}), StripeController.setStripeAccountInfo);
+router.post(    '/bookings/setStripeAccountInfo',         				    passport.authenticate('jwt', {session:false}), StripeController.setStripeAccountInfo);
 router.post(    '/bookings/transferFunds',         				            passport.authenticate('jwt', {session:false}), StripeController.transferFunds);
 
 router.post(    '/bookings/getStripeDashboardLink',         				  passport.authenticate('jwt', {session:false}), StripeController.getStripeDashboardLink);
 router.post(    '/bookings/realeaseFund',         			            	passport.authenticate('jwt', {session:false}), StripeController.realeaseFund);
+router.post(    '/bookings/webhook',                                  passport.authenticate('jwt', {session:false}), StripeController.webhook);
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
 
