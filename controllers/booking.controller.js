@@ -178,12 +178,10 @@ const remove = async function(req, res){
     if(err) return ReE(res, 'error occured trying to delete the booking');    
 
     // delete related invoices
-    [errInvoice, invoces] = await to(Invoice.destroy({where: {BookingId: booking.id}}));
-    if(errInvoice) return ReE(res, errInvoice, 422);
+    await to(Invoice.destroy({where: {BookingId: booking.id}}));    
 
     // delete relalted quotes
-    [errQuotes, quotes] = await to(Quote.destroy({where: {BookingId: booking.id}}));
-    if(errQuotes) return ReE(res, errQuotes, 422);
+    await to(Quote.destroy({where: {BookingId: booking.id}}));    
 
     return ReS(res, {message:'Deleted Booking'}, 204);
 }
