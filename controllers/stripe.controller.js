@@ -11,6 +11,7 @@ var request = require('request');
 const { to, ReE, ReS } = require('../services/util.service');
 
 function transferCardFunds(req, res) {
+	console.log("*******************")	
 	const amount = req.body.amount;
 	const currency = req.body.currency;
 	const token = req.body.stripeToken;
