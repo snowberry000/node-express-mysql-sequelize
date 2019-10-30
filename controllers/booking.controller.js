@@ -175,7 +175,13 @@ const remove = async function(req, res){
     booking = req.booking;
 
     [err, booking] = await to(booking.destroy());
-    if(err) return ReE(res, 'error occured trying to delete the booking');
+    if(err) return ReE(res, 'error occured trying to delete the booking');    
+
+    // delete related invoices
+    await to(Invoice.destroy({where: {BookingId: booking.id}}));    
+
+    // delete relalted quotes
+    await to(Quote.destroy({where: {BookingId: booking.id}}));    
 
     return ReS(res, {message:'Deleted Booking'}, 204);
 }
@@ -353,15 +359,20 @@ const getInvoices = async function(req, res){
 }
 module.exports.getInvoices = getInvoices;
 
-const getAllInvoices = async function(req, res){
-    let err, invoices;
+const getAllInvoices = async function(req, res){    
 
-    [err, invoices] = await to(Invoice.findAll());
-    if(err) return ReE(res, err, 422);
+    let user_json = req.user.toWeb();
+    let err, bookings;
+    [err, bookings] = await to(Booking.findAll({where: {UserId: user_json.id}}));
+
+    let bookingIds = bookings.map(item => item.id)
+
+    let errInvoice, invoices;
+    [errInvoice, invoices] = await to(Invoice.findAll({where:{BookingId: bookingIds}}));
+    if(errInvoice) return ReE(res, errInvoice, 422);
 
     let invoice_array = [];
-    invoice_array = invoices.map(obj=>obj.toWeb());
-
+    invoice_array = invoices.map(obj=>obj.toWeb());    
     return ReS(res, {invoices:invoice_array});
 }
 module.exports.getAllInvoices = getAllInvoices;

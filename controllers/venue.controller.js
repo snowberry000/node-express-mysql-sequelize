@@ -1,4 +1,4 @@
-const { Venue } = require('../models');
+const { Venue, Booking, Quote, Invoice, } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 
 const create = async function(req, res){
@@ -78,6 +78,19 @@ const remove = async function(req, res){
 
     [err, venue] = await to(venue.destroy());
     if(err) return ReE(res, 'error occured trying to delete the venue');
+
+    // find related bookings
+    [errBookings, bookings] = await to(Booking.findAll({where: {venueId: venue.id}}))
+    let bookingIds = bookings.map(item => item.id)
+    
+    // delete related invoices
+    await to(Invoice.destroy({where: {BookingId: bookingIds}}));
+
+    // delete related quotes
+    await to(Quote.destroy({where: {BookingId: bookingIds}}));
+
+    // delete related bookings
+    await to(Booking.destroy({where: {id: bookingIds}}))
 
     return ReS(res, {message:'Deleted Venue'}, 204);
 }
