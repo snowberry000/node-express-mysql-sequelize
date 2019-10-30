@@ -1,4 +1,4 @@
-const { Space } = require('../models');
+const { Space, Booking, Quote, Invoice, } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 
 const create = async function(req, res){
@@ -53,6 +53,18 @@ const remove = async function(req, res){
 
     [err, space] = await to(space.destroy());
     if(err) return ReE(res, 'error occured trying to delete the space');
+
+    [errBookings, bookings] = await to(Booking.findAll({where: {spaceId: space.id}}))
+    let bookingIds = bookings.map(item => item.id)
+    
+    // delete related invoices
+    await to(Invoice.destroy({where: {BookingId: bookingIds}}));
+
+    // delete related quotes
+    await to(Quote.destroy({where: {BookingId: bookingIds}}));
+
+    // delete related bookings
+    await to(Booking.destroy({where: {id: bookingIds}}))
 
     return ReS(res, {message:'Deleted Space'}, 204);
 }
