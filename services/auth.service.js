@@ -66,10 +66,11 @@ const authUser = async function(userInfo){//returns token
     }
 
     // if(!user) TE('Not registered');
-
-    if (!user)
-    [err, user] = await to(User.create(userInfo));    
-
+    is_new = false;
+    if (!user) {
+        [err, user] = await to(User.create(userInfo));
+        is_new = true;
+    }
     // [err, user] = await to(user.comparePassword(userInfo.password));
 
     if(err) TE(err.message);
@@ -87,7 +88,7 @@ const authUser = async function(userInfo){//returns token
         vatRate: "20",
     }));
 
-    return user;
+    return {user, is_new};
 
 }
 module.exports.authUser = authUser;
