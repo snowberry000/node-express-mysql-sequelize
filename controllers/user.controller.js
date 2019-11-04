@@ -96,9 +96,9 @@ const login = async function(req, res){
     [err, user] = await to(authService.authUser(req.body));
     if(err) return ReE(res, err, 422);
 
-    let user_obj = user.toWeb();
+    let user_obj = user.user.toWeb();
     delete user_obj.password;
 
-    return ReS(res, {token:user.getJWT(), user:user_obj});
+    return ReS(res, {token:user.user.getJWT(), user:{ ...user_obj, is_new:user.is_new}});
 }
 module.exports.login = login;

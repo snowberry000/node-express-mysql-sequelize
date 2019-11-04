@@ -10,6 +10,7 @@ const StatusController      					= require('../controllers/status.controller');
 const CustomerController    					= require('../controllers/customer.controller');
 const BookingController    						= require('../controllers/booking.controller');
 const StripeController                = require('../controllers/stripe.controller');
+const BookingColorController          = require('../controllers/bookingcolor.controller');
 
 const custom 	              = require('./../middleware/custom');
 
@@ -91,6 +92,11 @@ router.post(    '/bookings/transferFunds',         				            passport.auth
 router.post(    '/bookings/getStripeDashboardLink',         				  passport.authenticate('jwt', {session:false}), StripeController.getStripeDashboardLink);
 router.post(    '/bookings/realeaseFund',         			            	passport.authenticate('jwt', {session:false}), StripeController.realeaseFund);
 router.post(    '/bookings/webhook',                                  passport.authenticate('jwt', {session:false}), StripeController.webhook);
+
+router.post(    '/bookingcolor',               												passport.authenticate('jwt', {session:false}), BookingColorController.create);
+router.get(     '/bookingcolor',   																		passport.authenticate('jwt', {session:false}), BookingColorController.get);
+router.put(     '/bookingcolor/:bookingColor_id',   									passport.authenticate('jwt', {session:false}), custom.bookingColor, BookingColorController.update);
+
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
 

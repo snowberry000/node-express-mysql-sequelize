@@ -6,6 +6,7 @@ const Customer              = require('./../models').Customer;
 const Booking               = require('./../models').Booking;
 const Quote                 = require('./../models').Quote;
 const Invoice               = require('./../models').Invoice;
+const Bookingcolor          = require('./../models').Bookingcolor;
 
 const { to, ReE, ReS } = require('../services/util.service');
 
@@ -120,3 +121,17 @@ let invoice = async function (req, res, next) {
     next();
 }
 module.exports.invoice = invoice;
+
+let bookingColor = async function (req, res, next) {
+  let bookingColor_id, err, bookingColor;
+  bookingColor_id = req.params.bookingColor_id;
+
+  [err, bookingColor] = await to(Bookingcolor.findOne({where:{id:bookingColor_id}}));
+  if(err) return ReE(res, "err finding bookingcolor", 422);
+
+  if(!bookingColor) return ReE(res, "BookingColor not found with id: "+bookingColor_id, 422);
+
+  req.bookingColor = bookingColor;
+  next();
+}
+module.exports.bookingColor = bookingColor;
