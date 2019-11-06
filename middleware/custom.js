@@ -1,4 +1,4 @@
-const Company 			    = require('./../models').Company;
+const Company 			        = require('./../models').Company;
 const Venue                 = require('./../models').Venue;
 const Space                 = require('./../models').Space;
 const Status                = require('./../models').Status;
@@ -7,6 +7,7 @@ const Booking               = require('./../models').Booking;
 const Quote                 = require('./../models').Quote;
 const Invoice               = require('./../models').Invoice;
 const Bookingcolor          = require('./../models').Bookingcolor;
+const Calendarview          = require('./../models').Calendarview;
 
 const { to, ReE, ReS } = require('../services/util.service');
 
@@ -135,3 +136,17 @@ let bookingColor = async function (req, res, next) {
   next();
 }
 module.exports.bookingColor = bookingColor;
+
+let calendarVeiw = async function (req, res, next) {
+  let calendarView_id, err, calendarVeiw;
+  calendarView_id = req.params.calendarView_id;
+
+  [err, calendarVeiw] = await to(Calendarview.findOne({where:{id:calendarView_id}}));
+  if(err) return ReE(res, "err finding calendar view", 422);
+
+  if(!calendarVeiw) return ReE(res, "Calendar View not found with id: "+calendarView_id, 422);
+
+  req.calendarVeiw = calendarVeiw;
+  next();
+}
+module.exports.calendarVeiw = calendarVeiw;

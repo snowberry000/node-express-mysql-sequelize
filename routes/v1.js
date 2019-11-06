@@ -11,6 +11,7 @@ const CustomerController    					= require('../controllers/customer.controller')
 const BookingController    						= require('../controllers/booking.controller');
 const StripeController                = require('../controllers/stripe.controller');
 const BookingColorController          = require('../controllers/bookingcolor.controller');
+const CalendarViewController          = require('../controllers/calendarview.controller');
 
 const custom 	              = require('./../middleware/custom');
 
@@ -43,6 +44,7 @@ router.get(     '/spaces/venue/:venue_id',  													passport.authenticate('
 router.get(     '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.get);
 router.put(     '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.update);
 router.delete(  '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.remove);
+router.get(     '/userspaces',                                        passport.authenticate('jwt', {session:false}), SpaceController.getAllUserSpaces),
 
 router.post(    '/statuses',                  												passport.authenticate('jwt', {session:false}), StatusController.create);
 router.get(     '/statuses',  																				passport.authenticate('jwt', {session:false}), StatusController.getAll);
@@ -96,6 +98,10 @@ router.post(    '/bookings/webhook',                                  passport.a
 router.post(    '/bookingcolor',               												passport.authenticate('jwt', {session:false}), BookingColorController.create);
 router.get(     '/bookingcolor',   																		passport.authenticate('jwt', {session:false}), BookingColorController.get);
 router.put(     '/bookingcolor/:bookingColor_id',   									passport.authenticate('jwt', {session:false}), custom.bookingColor, BookingColorController.update);
+
+router.post(    '/calendarview',               												passport.authenticate('jwt', {session:false}), CalendarViewController.create);
+router.get(     '/calendarview',   																		passport.authenticate('jwt', {session:false}), CalendarViewController.get);
+router.put(     '/calendarview/:calendarView_id',   									passport.authenticate('jwt', {session:false}), custom.calendarVeiw, CalendarViewController.update);
 
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)

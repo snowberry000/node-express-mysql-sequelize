@@ -1,4 +1,4 @@
-const { Space, Booking, Quote, Invoice, } = require('../models');
+const { Space, Booking, Quote, Invoice, Venue } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 
 const create = async function(req, res){
@@ -69,3 +69,27 @@ const remove = async function(req, res){
     return ReS(res, {message:'Deleted Space'}, 204);
 }
 module.exports.remove = remove;
+
+const getAllUserSpaces = async function(req, res){
+
+    let user_json = req.user.toWeb();
+
+    let err, venues;
+
+    [err, venues] = await to(Venue.findAll({where: {UserId: user_json.id}}));
+    if(err) return ReE(res, err, 422);
+
+    let venues_array = [];
+    venues_array = venues.map(obj=>obj.id);
+
+    let errSpaces, spaces;
+
+    [errSpaces, spaces] = await to(Space.findAll({where: {VenueId: venues_array}}));
+	if(errSpaces) return ReE(res, errSpaces, 422);
+
+	let spaces_array = [];
+    spaces_array = spaces.map(obj => obj.toWeb());
+
+    return ReS(res, {spaces: spaces_array});
+}
+module.exports.getAllUserSpaces = getAllUserSpaces;
