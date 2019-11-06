@@ -44,6 +44,7 @@ router.get(     '/spaces/venue/:venue_id',  													passport.authenticate('
 router.get(     '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.get);
 router.put(     '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.update);
 router.delete(  '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.remove);
+router.get(     '/userspaces',                                        passport.authenticate('jwt', {session:false}), SpaceController.getAllUserSpaces),
 
 router.post(    '/statuses',                  												passport.authenticate('jwt', {session:false}), StatusController.create);
 router.get(     '/statuses',  																				passport.authenticate('jwt', {session:false}), StatusController.getAll);
