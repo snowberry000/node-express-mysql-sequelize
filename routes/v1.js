@@ -101,7 +101,7 @@ router.put(     '/bookingcolor/:bookingColor_id',   									passport.authentica
 
 router.post(    '/calendarview',               												passport.authenticate('jwt', {session:false}), CalendarViewController.create);
 router.get(     '/calendarview',   																		passport.authenticate('jwt', {session:false}), CalendarViewController.get);
-router.put(     '/calendarview/:calendarView_id',   									passport.authenticate('jwt', {session:false}), custom.calendarVeiw, CalendarViewController.update);
+router.put(     '/calendarview/:calendarView_id',   									passport.authenticate('jwt', {session:false}), custom.calendarView, CalendarViewController.update);
 
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
