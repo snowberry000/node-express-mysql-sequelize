@@ -137,16 +137,16 @@ let bookingColor = async function (req, res, next) {
 }
 module.exports.bookingColor = bookingColor;
 
-let calendarVeiw = async function (req, res, next) {
-  let calendarView_id, err, calendarVeiw;
+let calendarView = async function (req, res, next) {
+  let calendarView_id, err, calendarView;
   calendarView_id = req.params.calendarView_id;
 
-  [err, calendarVeiw] = await to(Calendarview.findOne({where:{id:calendarView_id}}));
+  [err, calendarView] = await to(Calendarview.findOne({where:{id:calendarView_id}}));
   if(err) return ReE(res, "err finding calendar view", 422);
 
-  if(!calendarVeiw) return ReE(res, "Calendar View not found with id: "+calendarView_id, 422);
+  if(!calendarView) return ReE(res, "Calendar View not found with id: "+calendarView_id, 422);
 
-  req.calendarVeiw = calendarVeiw;
+  req.calendarView = calendarView;
   next();
 }
-module.exports.calendarVeiw = calendarVeiw;
+module.exports.calendarView = calendarView;
