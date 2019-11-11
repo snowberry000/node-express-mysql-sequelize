@@ -12,6 +12,7 @@ const BookingController    						= require('../controllers/booking.controller');
 const StripeController                = require('../controllers/stripe.controller');
 const BookingColorController          = require('../controllers/bookingcolor.controller');
 const CalendarViewController          = require('../controllers/calendarview.controller');
+const CalendarSettingController      = require('../controllers/calendarsetting.controller');
 
 const custom 	              = require('./../middleware/custom');
 
@@ -103,6 +104,9 @@ router.post(    '/calendarview',               												passport.authenticate
 router.get(     '/calendarview',   																		passport.authenticate('jwt', {session:false}), CalendarViewController.get);
 router.put(     '/calendarview/:calendarView_id',   									passport.authenticate('jwt', {session:false}), custom.calendarView, CalendarViewController.update);
 
+router.post(    '/calendarsetting',                                   passport.authenticate('jwt', {session:false}), CalendarSettingController.create);
+router.get(     '/calendarsetting',   																passport.authenticate('jwt', {session:false}), CalendarSettingController.get);
+router.put(     '/calendarsetting/:calendarSetting_id',   					  passport.authenticate('jwt', {session:false}), custom.calendarSetting, CalendarSettingController.update);
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
 
