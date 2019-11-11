@@ -2,7 +2,7 @@ const {TE, to}              = require('../services/util.service');
 
 module.exports = (sequelize, DataTypes) => {
     var Model = sequelize.define('Bookingcolor', {
-        color:               DataTypes.STRING,    
+        color:               DataTypes.TEXT('long'),    
         UserId:              DataTypes.INTEGER,    
     });
 
