@@ -3,7 +3,8 @@ const {TE, to}              = require('../services/util.service');
 module.exports = (sequelize, DataTypes) => {
     var Model = sequelize.define('Calendarsetting', {
         viewMode:             DataTypes.STRING,
-        selectedDate:         DataTypes.STRING,    
+        selectedDate:         DataTypes.DATE,
+        viewExpand:           DataTypes.BOOLEAN,    
         UserId:               DataTypes.INTEGER,
     });
 
