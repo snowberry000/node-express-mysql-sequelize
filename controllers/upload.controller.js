@@ -8,7 +8,7 @@ var url = require('url');
 var path = require('path')
 
 const imageDir = './uploads/';
-var imageUrl = 'http://localhost:3001/v1/read/image/';
+var imageUrl = '/read/image/';
 
 let fileNames = [];
 let dateForFileName = Date.now();
