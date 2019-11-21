@@ -2,7 +2,7 @@ const {TE, to}              = require('../services/util.service');
 
 module.exports = (sequelize, DataTypes) => {
     var Model = sequelize.define('Calendarview', {
-        views:               DataTypes.STRING,    
+        views:               DataTypes.TEXT('long'),
         UserId:              DataTypes.INTEGER,    
     });
 
