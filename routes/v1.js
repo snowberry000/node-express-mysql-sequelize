@@ -12,7 +12,8 @@ const BookingController    						= require('../controllers/booking.controller');
 const StripeController                = require('../controllers/stripe.controller');
 const BookingColorController          = require('../controllers/bookingcolor.controller');
 const CalendarViewController          = require('../controllers/calendarview.controller');
-const CalendarSettingController      = require('../controllers/calendarsetting.controller');
+const CalendarSettingController       = require('../controllers/calendarsetting.controller');
+const UploadImageController           = require('../controllers/upload.controller');
 
 const custom 	              = require('./../middleware/custom');
 
@@ -108,6 +109,8 @@ router.post(    '/calendarsetting',                                   passport.a
 router.get(     '/calendarsetting',   																passport.authenticate('jwt', {session:false}), CalendarSettingController.get);
 router.put(     '/calendarsetting/:calendarSetting_id',   					  passport.authenticate('jwt', {session:false}), custom.calendarSetting, CalendarSettingController.update);
 
+router.post(    '/upload/image',                                      passport.authenticate('jwt', {session:false}), UploadImageController.uploadImage);
+router.get(    '/read/image/:id',                                     UploadImageController.readImage);
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
 
 //********* API DOCUMENTATION **********

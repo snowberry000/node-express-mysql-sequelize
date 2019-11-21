@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         postCode:           DataTypes.STRING,
         phone:              DataTypes.STRING,
         currency:           DataTypes.STRING,
-        vatRate:            DataTypes.STRING
+        vatRate:            DataTypes.STRING,
+        logoImg:            DataTypes.STRING,
     });
 
     Model.prototype.toWeb = function (pw) {
