@@ -11,19 +11,22 @@ const imageDir = './uploads/';
 var imageUrl = 'http://localhost:3001/v1/read/image/';
 
 let fileNames = [];
+let dateForFileName = Date.now();
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {    
     cb(null, imageDir)    
   },
   filename: function (req, file, cb) {    
-    cb(null, Date.now() + '-' + path.extname(file.originalname))
-    fileNames.push(Date.now() + '-' + path.extname(file.originalname));
+    cb(null, dateForFileName + '' + path.extname(file.originalname))
+    fileNames.push(dateForFileName + '' + path.extname(file.originalname));
   }
 })
 var upload = multer({ storage: storage }).array('file')
 
 const uploadImage = async function(req, res) {
   fileNames = [];
+  dateForFileName = Date.now();
   try {
 
     if (!fs.existsSync(imageDir))
