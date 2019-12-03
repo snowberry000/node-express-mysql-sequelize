@@ -102,3 +102,14 @@ const login = async function(req, res){
     return ReS(res, {token:user.user.getJWT(), user:{ ...user_obj, is_new:user.is_new}});
 }
 module.exports.login = login;
+
+const loginWithOutSeta = async function(req, res){    
+    [errOutSeta, userOutSeta] = await to(User.findOne({where: {outseta_id: req.params.outseta_id}}));
+    if(errOutSeta) return ReE(res, errOutSeta, 422);
+
+    [err, user] = await to(authService.authUser({email: userOutSeta.email}))
+    if(err) return ReE(res, err, 422);
+    
+    return ReS(res, {token: user.user.getJWT()})
+}
+module.exports.loginWithOutSeta = loginWithOutSeta;
