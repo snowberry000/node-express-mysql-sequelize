@@ -19,7 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         stripe_user_id          : DataTypes.STRING,
         stripe_refresh_token    : DataTypes.STRING,
         stripe_token_type       : DataTypes.STRING,
-        stripe_status                  : DataTypes.INTEGER,   //'NOT_CREATED': 0, 'CREATED': 1, 'ACTIVATED': 2
+        stripe_status           : DataTypes.INTEGER,   //'NOT_CREATED': 0, 'CREATED': 1, 'ACTIVATED': 2
+        uuid                    : {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
+        },
+
     });
 
     Model.associate = function(models){
