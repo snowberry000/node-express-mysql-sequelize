@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
 
 router.post(    '/auth/register',           													UserController.create);
 router.post(    '/auth/login',              													UserController.login);
-router.get(     '/auth/login/:outseta_id',                            UserController.loginWithOutSeta);
+router.get(     '/auth/login/:uuid',                                  UserController.loginWithUUID);
 router.get(     '/auth/me',                														passport.authenticate('jwt', {session:false}), UserController.get);
 
 router.get(     '/users',                   													passport.authenticate('jwt', {session:false}), UserController.getAll);

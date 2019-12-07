@@ -103,13 +103,13 @@ const login = async function(req, res){
 }
 module.exports.login = login;
 
-const loginWithOutSeta = async function(req, res){    
-    [errOutSeta, userOutSeta] = await to(User.findOne({where: {outseta_id: req.params.outseta_id}}));
-    if(errOutSeta) return ReE(res, errOutSeta, 422);
+const loginWithUUID = async function(req, res){    
+    [errUUID, userUUID] = await to(User.findOne({where: {uuid: req.params.uuid}}));
+    if(errUUID) return ReE(res, errUUID, 422);
 
-    [err, user] = await to(authService.authUser({email: userOutSeta.email}))
+    [err, user] = await to(authService.authUser({email: userUUID.email}))
     if(err) return ReE(res, err, 422);
     
     return ReS(res, {token: user.user.getJWT()})
 }
-module.exports.loginWithOutSeta = loginWithOutSeta;
+module.exports.loginWithUUID = loginWithUUID;
