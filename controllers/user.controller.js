@@ -29,6 +29,8 @@ const create = async function(req, res){
             street: "",
             vatId: "",
             vatRate: "20",
+            logoImg: "",
+            subdomain: "",
         }));
 
         return ReS(res, {message:'Successfully created new user.', user:user_json, token:user.getJWT()}, 201);
@@ -110,6 +112,6 @@ const loginWithUUID = async function(req, res){
     [err, user] = await to(authService.authUser({email: userUUID.email}))
     if(err) return ReE(res, err, 422);
     
-    return ReS(res, {token: user.user.getJWT()})
+    return ReS(res, {token: user.user.getJWT(), user: user.user.toWeb()})
 }
 module.exports.loginWithUUID = loginWithUUID;

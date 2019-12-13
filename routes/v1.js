@@ -60,6 +60,7 @@ router.get(     '/companies',               													passport.authenticate('
 router.get(     '/company',   																				passport.authenticate('jwt', {session:false}), CompanyController.get);
 router.put(     '/companies/:company_id',   													passport.authenticate('jwt', {session:false}), custom.company, CompanyController.update);
 router.delete(  '/companies/:company_id',   													passport.authenticate('jwt', {session:false}), custom.company, CompanyController.remove);
+router.put(     '/companies/savesubdomain/:company_id',               passport.authenticate('jwt', {session:false}), custom.company, CompanyController.saveSubdomain);
 
 router.post(    '/customers',               													passport.authenticate('jwt', {session:false}), CustomerController.create);
 router.get(     '/customers',               													passport.authenticate('jwt', {session:false}), CustomerController.getAll);
