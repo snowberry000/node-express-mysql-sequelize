@@ -65,3 +65,22 @@ const remove = async function(req, res){
     return ReS(res, {message:'Deleted Company'}, 204);
 }
 module.exports.remove = remove;
+
+const saveSubdomain = async function(req, res){
+    let err, company, data;
+    company = req.company;
+    data = req.body;
+    company.set(data);
+
+    [errOne, companyOne] = await to(Company.findOne({where: {subdomain: company.subdomain}}));
+    if(errOne || !companyOne) {        
+        [err, companySave] = await to(company.save());
+        if(err){
+            return ReE(res, err);
+        }
+        return ReS(res, {company:companySave.toWeb()});    
+    } else {        
+        return ReE(res, {message:'Someone already use this subdomain address'});
+    }       
+}
+module.exports.saveSubdomain = saveSubdomain;
