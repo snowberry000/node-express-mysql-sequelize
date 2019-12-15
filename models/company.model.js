@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         vatRate:            DataTypes.STRING,
         logoImg:            DataTypes.STRING,
         subdomain:          DataTypes.STRING,
+        subdomainCount:     DataTypes.INTEGER,
     });
 
     Model.prototype.toWeb = function (pw) {
