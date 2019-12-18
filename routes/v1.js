@@ -94,6 +94,7 @@ router.post(    '/bookings/transferCardFunds',         				        passport.auth
 router.post(    '/bookings/getCreateStripeAccountLink',         			passport.authenticate('jwt', {session:false}), StripeController.getCreateStripeAccountLink);
 router.post(    '/bookings/setStripeAccountInfo',         				    passport.authenticate('jwt', {session:false}), StripeController.setStripeAccountInfo);
 router.post(    '/bookings/transferFunds',         				            passport.authenticate('jwt', {session:false}), StripeController.transferFunds);
+router.post(    '/bookings/createPaymentIntent',                      passport.authenticate('jwt', {session:false}), StripeController.createPaymentIntent);
 
 router.post(    '/bookings/getStripeDashboardLink',         				  passport.authenticate('jwt', {session:false}), StripeController.getStripeDashboardLink);
 router.post(    '/bookings/realeaseFund',         			            	passport.authenticate('jwt', {session:false}), StripeController.realeaseFund);

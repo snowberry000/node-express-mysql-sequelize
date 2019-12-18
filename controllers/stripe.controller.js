@@ -165,6 +165,20 @@ function realeaseFund(req, res) {
 	});
 }
 
+
+async function createPaymentIntent(req, res) {
+	const options = {
+		...req.body,		
+	}
+
+	try {
+		const paymentIntent = await stripe.paymentIntents.create(options);
+    res.json(paymentIntent);
+	} catch (err) {
+		res.json(err)
+	}
+}
+
 module.exports = {
 	setStripeAccountInfo,
 	transferFunds,
@@ -175,4 +189,5 @@ module.exports = {
 	getStripeDashboardLink,
 	getCreateStripeAccountLink,
 	realeaseFund,
+	createPaymentIntent,
 }
