@@ -11,7 +11,6 @@ var request = require('request');
 const { to, ReE, ReS } = require('../services/util.service');
 
 function transferCardFunds(req, res) {
-	console.log("*******************")	
 	const amount = req.body.amount;
 	const currency = req.body.currency;
 	const token = req.body.stripeToken;
@@ -21,7 +20,7 @@ function transferCardFunds(req, res) {
 		source: token,
 		description: 'Charge for xxx',
 		receipt_email: 'bestservice-jinjin@hotmail.com',     //client receiver mail
-		metadata: { 'id': req.body.id }
+		metadata: { ...req.body.additionalData }
 	}).then(function (charge) {
 		console.log(JSON.stringify(charge));
 		return ReS(charge, { charge }, 201);
@@ -175,5 +174,5 @@ module.exports = {
 	webhook,
 	getStripeDashboardLink,
 	getCreateStripeAccountLink,
-	realeaseFund
+	realeaseFund,
 }

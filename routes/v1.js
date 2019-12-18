@@ -89,7 +89,7 @@ router.delete(  '/bookings/:booking_id/invoices/:invoice_id',         passport.a
 
 // router.post(    '/bookings/:booking_id/transferFunds',         				passport.authenticate('jwt', {session:false}), StripeController.transferFunds);
 // router.post(    '/bookings/:booking_id/realeaseFund',         				passport.authenticate('jwt', {session:false}), StripeController.realeaseFund);
-router.post(    '/bookings/transferCardFunds',         				            passport.authenticate('jwt', {session:false}), StripeController.transferCardFunds);
+router.post(    '/bookings/transferCardFunds',         				        passport.authenticate('jwt', {session:false}), StripeController.transferCardFunds);
 
 router.post(    '/bookings/getCreateStripeAccountLink',         			passport.authenticate('jwt', {session:false}), StripeController.getCreateStripeAccountLink);
 router.post(    '/bookings/setStripeAccountInfo',         				    passport.authenticate('jwt', {session:false}), StripeController.setStripeAccountInfo);
