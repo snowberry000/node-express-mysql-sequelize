@@ -110,6 +110,7 @@ router.put(     '/bookingcolor/:bookingColor_id',   									passport.authentica
 router.post(    '/calendarview',               												passport.authenticate('jwt', {session:false}), CalendarViewController.create);
 router.get(     '/calendarview',   																		passport.authenticate('jwt', {session:false}), CalendarViewController.get);
 router.put(     '/calendarview/:calendarView_id',   									passport.authenticate('jwt', {session:false}), custom.calendarView, CalendarViewController.update);
+router.get(     '/calendarview/subdomain/:subdomain',                 CalendarViewController.getWithSubdomain)
 
 router.post(    '/calendarsetting',                                   passport.authenticate('jwt', {session:false}), CalendarSettingController.create);
 router.get(     '/calendarsetting',   																passport.authenticate('jwt', {session:false}), CalendarSettingController.get);

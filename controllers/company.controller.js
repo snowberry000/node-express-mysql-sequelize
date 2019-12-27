@@ -90,6 +90,6 @@ const checkSubdomain = async function(req, res){
     if (err) {
         return ReE(res, err);
     }
-    return ReS(res, {success: true, company: company.toWeb()})
+    return ReS(res, {company: company.toWeb()})
 }
 module.exports.checkSubdomain = checkSubdomain;
