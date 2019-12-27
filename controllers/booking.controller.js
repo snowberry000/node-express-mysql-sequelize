@@ -1,4 +1,4 @@
-const { Booking, Quote, Invoice, Venue, Space, Customer, User, Status } = require('../models');
+const { Booking, Quote, Invoice, Venue, Space, Customer, User, Status, Company } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 const mail = require('../lib/mail');
 
@@ -407,3 +407,62 @@ const removeInvoice = async function(req, res){
     return ReS(res, {message:'Deleted Invoice'}, 204);
 }
 module.exports.removeInvoice = removeInvoice;
+
+const bookingWithSubdomain = async function(req, res){
+    const subdomain = req.params.subdomain;
+    [errCompany, company] = await to(Company.findOne({where: {subdomain: req.params.subdomain}}))
+    if (errCompany) {
+        return ReE(res, errCompany);
+    }
+
+    [err, bookings] = await to(Booking.findAll({where: {UserId: company.UserId}}));
+    if(err) return ReE(res, err, 422);
+
+    let booking_array = [];
+    booking_array = await Promise.all(bookings.map(async(obj) => {
+        let booking_obj = obj.toWeb();
+
+        let venueErr, venue;
+        [venueErr, venue] = await to(Venue.findOne({where: {id: booking_obj.venueId}}));
+
+        if(venueErr || !venue)
+            booking_obj.venue = null;
+        else
+            booking_obj.venue = venue.toWeb();
+
+        let spaceErr, space;
+        [spaceErr, space] = await to(Space.findOne({where: {id: booking_obj.spaceId}}));
+        if(spaceErr || !space)
+            booking_obj.space = null;
+        else
+            booking_obj.space = space.toWeb();
+
+        let customerErr, customer;
+        [customerErr, customer] = await to(Customer.findOne({where: {id: booking_obj.customerId}}));
+        if(customerErr || !customer)
+            booking_obj.customer = null;
+        else
+            booking_obj.customer = customer.toWeb();
+
+        let ownerErr, owner;
+        [ownerErr, owner] = await to(User.findOne({where: {id: booking_obj.ownerId}}));
+        if(ownerErr || !owner)
+            booking_obj.owner = null;
+        else{
+            booking_obj.owner = owner.toWeb();
+            delete booking_obj.owner.password;
+        }
+
+        let statusErr, status;
+        [statusErr, status] = await to(Status.findOne({where: {id: booking_obj.statusId}}));
+        if(statusErr || !status)
+            booking_obj.status = null;
+        else
+            booking_obj.status = status.toWeb();
+
+        return booking_obj;
+    }));
+
+    return ReS(res, {bookings:booking_array});
+}
+module.exports.bookingWithSubdomain = bookingWithSubdomain;

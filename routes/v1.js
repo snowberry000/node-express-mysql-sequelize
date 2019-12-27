@@ -48,6 +48,7 @@ router.get(     '/spaces/:space_id',        													passport.authenticate('
 router.put(     '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.update);
 router.delete(  '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.remove);
 router.get(     '/userspaces',                                        passport.authenticate('jwt', {session:false}), SpaceController.getAllUserSpaces),
+router.get(     '/spaces/subdomain/:subdomain',                       SpaceController.getAllWithSubdomain)
 
 router.post(    '/statuses',                  												passport.authenticate('jwt', {session:false}), StatusController.create);
 router.get(     '/statuses',  																				passport.authenticate('jwt', {session:false}), StatusController.getAll);
@@ -61,6 +62,7 @@ router.get(     '/company',   																				passport.authenticate('jwt', {
 router.put(     '/companies/:company_id',   													passport.authenticate('jwt', {session:false}), custom.company, CompanyController.update);
 router.delete(  '/companies/:company_id',   													passport.authenticate('jwt', {session:false}), custom.company, CompanyController.remove);
 router.put(     '/companies/savesubdomain/:company_id',               passport.authenticate('jwt', {session:false}), custom.company, CompanyController.saveSubdomain);
+router.get(     '/companies/subdomain/:subdomain',                    CompanyController.checkSubdomain)
 
 router.post(    '/customers',               													passport.authenticate('jwt', {session:false}), CustomerController.create);
 router.get(     '/customers',               													passport.authenticate('jwt', {session:false}), CustomerController.getAll);
@@ -73,6 +75,7 @@ router.get(     '/bookings',               														passport.authenticate('
 router.get(     '/bookings/:booking_id',   														passport.authenticate('jwt', {session:false}), custom.booking, BookingController.get);
 router.put(     '/bookings/:booking_id',   														passport.authenticate('jwt', {session:false}), custom.booking, BookingController.update);
 router.delete(  '/bookings/:booking_id',   														passport.authenticate('jwt', {session:false}), custom.booking, BookingController.remove);
+router.get(     '/bookings/subdomain/:subdomain',                   BookingController.bookingWithSubdomain);
 
 router.post(    '/bookings/:booking_id/quotes',         							passport.authenticate('jwt', {session:false}), BookingController.createQuote);
 router.get(     '/bookings/:booking_id/quotes',         							passport.authenticate('jwt', {session:false}), BookingController.getAllQuotes);

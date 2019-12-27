@@ -84,3 +84,12 @@ const saveSubdomain = async function(req, res){
     }       
 }
 module.exports.saveSubdomain = saveSubdomain;
+
+const checkSubdomain = async function(req, res){
+    [err, company] = await to(Company.findOne({where: {subdomain: req.params.subdomain}}))
+    if (err) {
+        return ReE(res, err);
+    }
+    return ReS(res, {success: true, company: company.toWeb()})
+}
+module.exports.checkSubdomain = checkSubdomain;
