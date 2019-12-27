@@ -55,6 +55,7 @@ router.get(     '/statuses',  																				passport.authenticate('jwt', {
 router.get(     '/statuses/:status_id',        												passport.authenticate('jwt', {session:false}), custom.status, StatusController.get);
 router.put(     '/statuses/:status_id',        												passport.authenticate('jwt', {session:false}), custom.status, StatusController.update);
 router.delete(  '/statuses/:status_id',        												passport.authenticate('jwt', {session:false}), custom.status, StatusController.remove);
+router.get(     '/statuses/subdomain/:subdomain',                     StatusController.getAllWithSubdomain)
 
 router.post(    '/companies',               													passport.authenticate('jwt', {session:false}), CompanyController.create);
 router.get(     '/companies',               													passport.authenticate('jwt', {session:false}), CompanyController.getAll);
@@ -106,6 +107,7 @@ router.post(    '/bookings/webhook',                                  passport.a
 router.post(    '/bookingcolor',               												passport.authenticate('jwt', {session:false}), BookingColorController.create);
 router.get(     '/bookingcolor',   																		passport.authenticate('jwt', {session:false}), BookingColorController.get);
 router.put(     '/bookingcolor/:bookingColor_id',   									passport.authenticate('jwt', {session:false}), custom.bookingColor, BookingColorController.update);
+router.get(     '/bookingcolor/subdomain/:subdomain',                 BookingColorController.getWithSubdomain);
 
 router.post(    '/calendarview',               												passport.authenticate('jwt', {session:false}), CalendarViewController.create);
 router.get(     '/calendarview',   																		passport.authenticate('jwt', {session:false}), CalendarViewController.get);

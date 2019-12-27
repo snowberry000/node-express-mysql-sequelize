@@ -1,4 +1,4 @@
-const { Bookingcolor } = require('../models');
+const { Bookingcolor, Company } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 
 const create = async function(req, res){
@@ -38,3 +38,16 @@ const update = async function(req, res){
   return ReS(res, {bookingColor:bookingColor.toWeb()});
 }
 module.exports.update = update;
+
+const getWithSubdomain = async function(req, res){
+  const subdomain = req.params.subdomain;
+  [errCompany, company] = await to(Company.findOne({where: {subdomain: req.params.subdomain}}))
+  if (errCompany) {
+      return ReE(res, errCompany);
+  }
+  [err, bookingColor] = await to(Bookingcolor.findOne({where: {UserId: company.UserId}}));
+  if(err) return ReE(res, err, 422);    
+
+  return ReS(res, {bookingColor:bookingColor?bookingColor.toWeb():null});
+}
+module.exports.getWithSubdomain = getWithSubdomain;
