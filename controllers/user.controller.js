@@ -119,12 +119,12 @@ const loginWithEmailSubdomain = async function(req, res){
     [errCompany, company] = await to(Company.findOne({where: {subdomain: req.body.subdomain}}))
 
     if (errCompany || !company)
-        return ReE(res, errCompany, 422)
+        return ReE(res, {message: 'Subdomain not found'}, 422)
             
     let errUser, userFind;
     [errUser, userFind] = await to(User.findOne({where: {email:req.body.email, id:company.UserId}}))
     if(errUser || !userFind)
-        return ReE(res, errUser, 422)
+        return ReE(res, {message: 'Email is not matched with subdomain.'}, 422)
     
     let err, user;
     [err, user] = await to(authService.authUser({email: userFind.email}))

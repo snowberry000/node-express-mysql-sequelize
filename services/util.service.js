@@ -15,7 +15,7 @@ module.exports.ReE = function(res, err, code){ // Error Web Response
     }
 
     if(!err) {
-        err={message: "Object not found"}        
+        err="Object not found"        
     }
 
     if(typeof code !== 'undefined') res.statusCode = code;
