@@ -1,7 +1,6 @@
-const { User }          = require('../models');
-const { Company } = require('../models');
-const authService       = require('../services/auth.service');
-const { to, ReE, ReS }  = require('../services/util.service');
+const { User, Company }             = require('../models');
+const authService                   = require('../services/auth.service');
+const { to, ReE, ReS }              = require('../services/util.service');
 
 const create = async function(req, res){
     const body = req.body;
@@ -115,3 +114,22 @@ const loginWithUUID = async function(req, res){
     return ReS(res, {token: user.user.getJWT(), user: user.user.toWeb()})
 }
 module.exports.loginWithUUID = loginWithUUID;
+
+const loginWithEmailSubdomain = async function(req, res){
+    [errCompany, company] = await to(Company.findOne({where: {subdomain: req.body.subdomain}}))
+
+    if (errCompany || !company)
+        return ReE(res, errCompany, 422)
+            
+    let errUser, userFind;
+    [errUser, userFind] = await to(User.findOne({where: {email:req.body.email, id:company.UserId}}))
+    if(errUser || !userFind)
+        return ReE(res, errUser, 422)
+    
+    let err, user;
+    [err, user] = await to(authService.authUser({email: userFind.email}))
+    if(err) return ReE(res, err, 422);
+
+    return ReS(res, {token: user.user.getJWT(), user: user.user.toWeb()})
+}
+module,exports.loginWithEmailSubdomain = loginWithEmailSubdomain;

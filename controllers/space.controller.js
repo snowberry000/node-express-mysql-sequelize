@@ -94,8 +94,7 @@ const getAllUserSpaces = async function(req, res){
 }
 module.exports.getAllUserSpaces = getAllUserSpaces;
 
-const getAllWithSubdomain = async function(req, res){
-    const subdomain = req.params.subdomain;
+const getAllWithSubdomain = async function(req, res){    
     [errCompany, company] = await to(Company.findOne({where: {subdomain: req.params.subdomain}}))
     if (errCompany) {
         return ReE(res, errCompany);

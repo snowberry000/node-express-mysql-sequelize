@@ -35,6 +35,7 @@ router.get(     '/auth/me',                														passport.authenticate('
 router.get(     '/users',                   													passport.authenticate('jwt', {session:false}), UserController.getAll);
 router.put(     '/users',                   													passport.authenticate('jwt', {session:false}), UserController.update);
 router.delete(  '/users',                   													passport.authenticate('jwt', {session:false}), UserController.remove);
+router.post(    '/users/loginWithEmailSubdomain',                     UserController.loginWithEmailSubdomain)
 
 router.post(    '/venues',                  													passport.authenticate('jwt', {session:false}), VenueController.create);
 router.get(     '/venues',    																				passport.authenticate('jwt', {session:false}), VenueController.getAll);
