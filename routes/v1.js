@@ -35,6 +35,7 @@ router.get(     '/auth/me',                														passport.authenticate('
 router.get(     '/users',                   													passport.authenticate('jwt', {session:false}), UserController.getAll);
 router.put(     '/users',                   													passport.authenticate('jwt', {session:false}), UserController.update);
 router.delete(  '/users',                   													passport.authenticate('jwt', {session:false}), UserController.remove);
+router.post(    '/users/loginWithEmailSubdomain',                     UserController.loginWithEmailSubdomain)
 
 router.post(    '/venues',                  													passport.authenticate('jwt', {session:false}), VenueController.create);
 router.get(     '/venues',    																				passport.authenticate('jwt', {session:false}), VenueController.getAll);
@@ -48,12 +49,14 @@ router.get(     '/spaces/:space_id',        													passport.authenticate('
 router.put(     '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.update);
 router.delete(  '/spaces/:space_id',        													passport.authenticate('jwt', {session:false}), custom.space, SpaceController.remove);
 router.get(     '/userspaces',                                        passport.authenticate('jwt', {session:false}), SpaceController.getAllUserSpaces),
+router.get(     '/spaces/subdomain/:subdomain',                       SpaceController.getAllWithSubdomain)
 
 router.post(    '/statuses',                  												passport.authenticate('jwt', {session:false}), StatusController.create);
 router.get(     '/statuses',  																				passport.authenticate('jwt', {session:false}), StatusController.getAll);
 router.get(     '/statuses/:status_id',        												passport.authenticate('jwt', {session:false}), custom.status, StatusController.get);
 router.put(     '/statuses/:status_id',        												passport.authenticate('jwt', {session:false}), custom.status, StatusController.update);
 router.delete(  '/statuses/:status_id',        												passport.authenticate('jwt', {session:false}), custom.status, StatusController.remove);
+router.get(     '/statuses/subdomain/:subdomain',                     StatusController.getAllWithSubdomain)
 
 router.post(    '/companies',               													passport.authenticate('jwt', {session:false}), CompanyController.create);
 router.get(     '/companies',               													passport.authenticate('jwt', {session:false}), CompanyController.getAll);
@@ -61,6 +64,7 @@ router.get(     '/company',   																				passport.authenticate('jwt', {
 router.put(     '/companies/:company_id',   													passport.authenticate('jwt', {session:false}), custom.company, CompanyController.update);
 router.delete(  '/companies/:company_id',   													passport.authenticate('jwt', {session:false}), custom.company, CompanyController.remove);
 router.put(     '/companies/savesubdomain/:company_id',               passport.authenticate('jwt', {session:false}), custom.company, CompanyController.saveSubdomain);
+router.get(     '/companies/subdomain/:subdomain',                    CompanyController.checkSubdomain)
 
 router.post(    '/customers',               													passport.authenticate('jwt', {session:false}), CustomerController.create);
 router.get(     '/customers',               													passport.authenticate('jwt', {session:false}), CustomerController.getAll);
@@ -73,6 +77,7 @@ router.get(     '/bookings',               														passport.authenticate('
 router.get(     '/bookings/:booking_id',   														passport.authenticate('jwt', {session:false}), custom.booking, BookingController.get);
 router.put(     '/bookings/:booking_id',   														passport.authenticate('jwt', {session:false}), custom.booking, BookingController.update);
 router.delete(  '/bookings/:booking_id',   														passport.authenticate('jwt', {session:false}), custom.booking, BookingController.remove);
+router.get(     '/bookings/subdomain/:subdomain',                   BookingController.bookingWithSubdomain);
 
 router.post(    '/bookings/:booking_id/quotes',         							passport.authenticate('jwt', {session:false}), BookingController.createQuote);
 router.get(     '/bookings/:booking_id/quotes',         							passport.authenticate('jwt', {session:false}), BookingController.getAllQuotes);
@@ -103,10 +108,12 @@ router.post(    '/bookings/webhook',                                  passport.a
 router.post(    '/bookingcolor',               												passport.authenticate('jwt', {session:false}), BookingColorController.create);
 router.get(     '/bookingcolor',   																		passport.authenticate('jwt', {session:false}), BookingColorController.get);
 router.put(     '/bookingcolor/:bookingColor_id',   									passport.authenticate('jwt', {session:false}), custom.bookingColor, BookingColorController.update);
+router.get(     '/bookingcolor/subdomain/:subdomain',                 BookingColorController.getWithSubdomain);
 
 router.post(    '/calendarview',               												passport.authenticate('jwt', {session:false}), CalendarViewController.create);
 router.get(     '/calendarview',   																		passport.authenticate('jwt', {session:false}), CalendarViewController.get);
 router.put(     '/calendarview/:calendarView_id',   									passport.authenticate('jwt', {session:false}), custom.calendarView, CalendarViewController.update);
+router.get(     '/calendarview/subdomain/:subdomain',                 CalendarViewController.getWithSubdomain)
 
 router.post(    '/calendarsetting',                                   passport.authenticate('jwt', {session:false}), CalendarSettingController.create);
 router.get(     '/calendarsetting',   																passport.authenticate('jwt', {session:false}), CalendarSettingController.get);

@@ -10,8 +10,12 @@ module.exports.to = async (promise) => {
 };
 
 module.exports.ReE = function(res, err, code){ // Error Web Response
-    if(typeof err == 'object' && typeof err.message != 'undefined'){
+    if(err && typeof err == 'object' && typeof err.message != 'undefined'){
         err = err.message;
+    }
+
+    if(!err) {
+        err="Object not found"        
     }
 
     if(typeof code !== 'undefined') res.statusCode = code;

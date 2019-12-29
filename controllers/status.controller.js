@@ -1,4 +1,4 @@
-const { Status } = require('../models');
+const { Status, Company } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -80,3 +80,34 @@ const remove = async function(req, res){
     return ReS(res, {message:'Deleted Status'}, 204);
 }
 module.exports.remove = remove;
+
+const getAllWithSubdomain = async function(req, res){
+    const subdomain = req.params.subdomain;
+    [errCompany, company] = await to(Company.findOne({where: {subdomain: req.params.subdomain}}))
+    if (errCompany) {
+        return ReE(res, errCompany);
+    }
+
+    let err, statuses;
+
+    [err, statuses] = await to(Status.findAll({where: {[Op.or]: [{UserId: company.UserId}, {type: 'default'}]}}));
+	if(err) return ReE(res, err, 422);
+
+	let statuses_array = [];
+    statuses_array = statuses.map(obj => obj.toWeb());
+
+    const defaultValues = ['Enquiry', 'Proposal', 'Accepted', 'Paid'];
+    let newStatusArray = [];
+    defaultValues.forEach(item => {
+        let filteredOne = statuses_array.filter(itemOne => itemOne.name === item || itemOne.parentId === item);
+        filteredOne.sort((a,b) => (a.order > b.order) ? 1 : -1);
+        newStatusArray = [...newStatusArray, ...filteredOne];
+    })
+
+    const filteredOne = statuses_array.filter(item => item.type === 'custom' && item.parentId === null)
+    filteredOne.sort((a,b) => (a.order > b.order) ? 1 : -1);
+    newStatusArray = [ ...newStatusArray, ...filteredOne];
+
+    return ReS(res, {statuses: newStatusArray});
+}
+module.exports.getAllWithSubdomain = getAllWithSubdomain;
