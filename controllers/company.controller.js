@@ -87,7 +87,7 @@ module.exports.saveSubdomain = saveSubdomain;
 
 const checkSubdomain = async function(req, res){
     [err, company] = await to(Company.findOne({where: {subdomain: req.params.subdomain}}))
-    if (err) {
+    if (err || !company) {
         return ReE(res, err);
     }
     return ReS(res, {company: company.toWeb()})
