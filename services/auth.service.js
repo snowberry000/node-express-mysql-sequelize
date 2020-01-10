@@ -74,7 +74,7 @@ const authUser = async function(userInfo){//returns token
     // [err, user] = await to(user.comparePassword(userInfo.password));
 
     if(err) TE(err.message);
-    
+
     if (is_new) {
         const { Company } = require('../models');
         [errCompany, company] = await to(Company.create({
@@ -89,6 +89,7 @@ const authUser = async function(userInfo){//returns token
             vatRate: "20",
             logoImg: "",
             subdomain: "",
+            subdomainCount: 0,
         }));
     }    
 
