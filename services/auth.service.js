@@ -74,19 +74,23 @@ const authUser = async function(userInfo){//returns token
     // [err, user] = await to(user.comparePassword(userInfo.password));
 
     if(err) TE(err.message);
-
-    const { Company } = require('../models');
-    [errCompany, company] = await to(Company.create({
-        UserId: user.id,
-        city: "",
-        currency: "GBP",
-        name: "",
-        phone: "",
-        postCode: "",
-        street: "",
-        vatId: "",
-        vatRate: "20",
-    }));
+    
+    if (is_new) {
+        const { Company } = require('../models');
+        [errCompany, company] = await to(Company.create({
+            UserId: user.id,
+            city: "",
+            currency: "GBP",
+            name: "",
+            phone: "",
+            postCode: "",
+            street: "",
+            vatId: "",
+            vatRate: "20",
+            logoImg: "",
+            subdomain: "",
+        }));
+    }    
 
     return {user, is_new};
 
