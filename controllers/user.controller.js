@@ -30,6 +30,7 @@ const create = async function(req, res){
             vatRate: "20",
             logoImg: "",
             subdomain: "",
+            subdomainCount: 0,
         }));
 
         return ReS(res, {message:'Successfully created new user.', user:user_json, token:user.getJWT()}, 201);
