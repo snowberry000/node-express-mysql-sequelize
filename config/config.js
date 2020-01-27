@@ -21,9 +21,9 @@ CONFIG.email_pass  = process.env.EMAIL_PASS || '';
 CONFIG.SEND_GRID_API_KEY  = process.env.SEND_GRID_API_KEY || '';
 CONFIG.FROM_EMAIL  = process.env.FROM_EMAIL || 'hello@justvenue.co.uk';
 
-//dev test accounts -> email : bestservice-jinjin@hotmail.com
-CONFIG.stripe_client_id   = process.env.STRIPE_CLIENT_ID  || 'ca_FyKLDjkMaWCLpsfU5F8UCsfC9sjOeIRs'
-CONFIG.stripe_secret_key  = process.env.STRIPE_SECRET_KEY || 'sk_test_j77QBEGhvKzFCVAqKrtKWhWH002Q2pTrzl'
-CONFIG.stripe_public_key  = process.env.STRIPE_PUBLIC_KEY || 'pk_test_WzBWalkASwZyPFaA0dJhOZ1p00bXlkON04' 
+//dev test accounts -> email : fioriolorenzof@gmail.com
+CONFIG.stripe_client_id   = process.env.STRIPE_CLIENT_ID  || 'ca_FyKLDjkMaWCLpsfU5F8UCsfC9sjOeIRs';
+CONFIG.stripe_secret_key  = process.env.STRIPE_SECRET_KEY || 'sk_test_IP5jJfaSk6NPveXFZ5jig3dB00r0iPuiRl';
+CONFIG.stripe_public_key  = process.env.STRIPE_PUBLIC_KEY || 'pk_test_oKhuGW7oVlCVOVr9bboNGhTZ00USJNazTn';
 
 module.exports = CONFIG;

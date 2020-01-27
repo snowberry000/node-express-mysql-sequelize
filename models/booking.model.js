@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         customerId:            DataTypes.BIGINT,
         ownerId:               DataTypes.BIGINT,
         statusId:              DataTypes.BIGINT,
-        slots:                 DataTypes.TEXT
+        slots:                 DataTypes.TEXT,
+        note:                 DataTypes.TEXT
     });
 
     Model.associate = function(models){

@@ -189,7 +189,7 @@ module.exports.remove = remove;
 
 const createQuote = async function(req, res){
     let booking_id = req.params.booking_id;
-    // let user = req.user.toWeb();
+    let user = req.user.toWeb();
 
     let quote_info = req.body;
     quote_info.BookingId = booking_id;
@@ -200,11 +200,17 @@ const createQuote = async function(req, res){
 
     let bookingErr, booking;
     [bookingErr, booking] = await to(Booking.findOne({where: {id: booking_id}}));    
-    if(err) return ReE(res, err, 422);
+    if(bookingErr) return ReE(res, err, 422);
 
     let customerErr, customer;
     [customerErr, customer] = await to(Customer.findOne({where: {id: booking.customerId}}));
-    if(err) return ReE(res, err, 422);
+    if(customerErr) return ReE(res, err, 422);
+
+    let companyErr, company;
+    [companyErr, company] = await to(Company.findOne({where: {UserId: user.id}}));
+    if(companyErr) return ReE(res, err, 422);
+
+    const address = company.name + ' - ' + company.street + ' ' + company.city + ' ' + company.postCode;
 
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
@@ -225,18 +231,35 @@ const createQuote = async function(req, res){
     weekday[6] = "Saturday";
 
     var n = weekday[today.getDay()];
-    const date =  n + ',' + dd + ' ' + monthNames[today.getMonth()] + ' ' + yyyy + ' at ' + today.getHours() + ":" + today.getMinutes();
+    const date =  n + ', ' + dd + ' ' + monthNames[today.getMonth()] + ' ' + yyyy + ' at ' + today.getHours() + ":" + today.getMinutes();
 
     const [netSubtotal, taxes, grandTotal] = computeCostItemsSummary(
       JSON.parse(quote_info.costItems),
       quote_info.discount
     );
-    const slots = JSON.parse(quote_info.slots)
+    const slots = JSON.parse(quote_info.slots);
     let spaces = '';
     let duration = '';
     if (slots.length) {
-      spaces = slots[0].kind;
-      duration = slots[0].endHour - slots[0].startHour;
+      spaces = slots[0].kind;   
+      if(slots[0].endMinute >= slots.startMinute){
+        const hourDiff = slots[0].endHour - slots[0].startHour;
+        const minuteDiff = slots[0].endMinute - slots[0].startMinute;
+
+        if (minuteDiff != 0)
+          duration = hourDiff + ' hours ' + minuteDiff + ' minutes ';
+        else
+          duration = hourDiff + ' hours ';
+      }else {
+        const hourDiff = slots[0].endHour - slots[0].startHour - 1;
+        const minuteDiff = slots[0].startMinute - slots[0].endMinute;
+        
+        if (minuteDiff != 0)
+          duration = hourDiff + ' hours ' + minuteDiff + ' minutes ';
+        else
+          duration = hourDiff + ' hours';
+      }
+        
     }
 
     let spaceErr, space;
@@ -246,7 +269,8 @@ const createQuote = async function(req, res){
       subject: 'New Quotation',
       emailMessage: 'New Quotation',
       date: date,
-      duration: "2 hours" || duration,
+      address: address,
+      duration: duration || "2 hours",
     //   spaces: spaces || "single-day" || quote_info.note || "Spaces",
       spaces: space.name,
       costItems: JSON.parse(quote_info.costItems),
