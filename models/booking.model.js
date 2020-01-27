@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         ownerId:               DataTypes.BIGINT,
         statusId:              DataTypes.BIGINT,
         slots:                 DataTypes.TEXT,
-        note:                 DataTypes.TEXT
+        note:                  DataTypes.TEXT,
+        calls:                 DataTypes.TEXT, 
     });
 
     Model.associate = function(models){
